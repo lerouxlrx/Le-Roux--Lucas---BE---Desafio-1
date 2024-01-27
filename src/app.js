@@ -63,5 +63,16 @@ app.put("/products/:pid", async (req, res) => {
     }
 })
 
+app.delete("/products/:pid", async (req, res) => {
+    let id = req.params.pid;
+    try {
+        await productManager.deleteProduct(parseInt(id));
+        res.json({message: "Se elimino el producto."});
+    } catch (error) {
+        console.log ("No se pudo eliminar el producto");
+        res.status(500).json({error: "Error al eliminar producto"+error});
+    }
+})
+
 app.listen(PUERTO);
 
