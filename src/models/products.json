@@ -1,6 +1,6 @@
 [
   {
-    "id": "1",
+    "id": 1,
     "title": "Alargue blanco 1 pieza",
     "price": "2000",
     "category": "Alargues",
@@ -11,7 +11,7 @@
     "status": "true"
   },
   {
-    "id": "2",
+    "id": 2,
     "title": "Alargue blanco armado",
     "price": "2500",
     "category": "Alargues",
@@ -22,18 +22,18 @@
     "status": "true"
   },
   {
-    "id": "3",
+    "id": 3,
     "title": "Alargue negro",
-    "price": "2500",
+    "price": "10000",
     "category": "Alargues",
     "thumbnails": "https://static.wixstatic.com/media/9442b5_ebabe00328504bf3a9fb9751b6c9cbcf~mv2.jpg/v1/fill/w_407,h_305,al_c,lg_1,q_80,enc_auto/9442b5_ebabe00328504bf3a9fb9751b6c9cbcf~mv2.jpg",
-    "stock": "20",
+    "stock": "3",
     "description": "Alargue negro, con enchufes intercambiables",
     "code": "010003",
     "status": "true"
   },
   {
-    "id": "4",
+    "id": 4,
     "title": "Alargue largo",
     "price": "5000",
     "category": "Alargues",
@@ -44,7 +44,7 @@
     "status": "true"
   },
   {
-    "id": "5",
+    "id": 5,
     "title": "Adaptador 3a2",
     "price": "1000",
     "category": "Adaptadores",
@@ -55,7 +55,7 @@
     "status": "true"
   },
   {
-    "id": "6",
+    "id": 6,
     "title": "Adaptador x3a3",
     "price": "2000",
     "category": "Adaptadores",
@@ -66,7 +66,7 @@
     "status": "true"
   },
   {
-    "id": "7",
+    "id": 7,
     "title": "Zapatilla blanca x4",
     "price": "3000",
     "category": "Zapatillas",
@@ -77,7 +77,7 @@
     "status": "true"
   },
   {
-    "id": "8",
+    "id": 8,
     "title": "Zapatilla x4 con USB",
     "price": "4500",
     "category": "Zapatillas",
@@ -88,7 +88,7 @@
     "status": "true"
   },
   {
-    "id": "9",
+    "id": 9,
     "title": "Zapatilla x2",
     "price": "1500",
     "category": "Zapatillas",
@@ -99,7 +99,7 @@
     "status": "true"
   },
   {
-    "id": "10",
+    "id": 10,
     "title": "Estabilizador retro x6",
     "price": "15000",
     "thumbnails": "https://www.mylshop.com.ar/wp-content/uploads/2019/08/Estabilizador-de-tension-unico-6-tomas-Atomlux-01.jpg",
@@ -109,7 +109,7 @@
     "status": "true"
   },
   {
-    "id": "11",
+    "id": 11,
     "title": "Estabilizador negro x4",
     "price": "10000",
     "category": "Estabilizadores",
@@ -120,7 +120,7 @@
     "status": "true"
   },
   {
-    "id": "12",
+    "id": 12,
     "title": "Estabilizador negro x8 plano",
     "price": "15000",
     "category": "Estabilizadores",

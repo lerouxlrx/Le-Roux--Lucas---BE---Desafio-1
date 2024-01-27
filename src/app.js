@@ -50,5 +50,18 @@ app.post("/products", async (req, res) => {
     }
 })
 
+app.put("/products/:pid", async (req, res) => {
+    let id = req.params.pid;
+    const productoActualizado = req.body;
+
+    try {
+        await productManager.updateProduct(parseInt(id), productoActualizado);
+        res.json({message: "Se actualizo el producto."});
+    } catch (error) {
+        console.log ("No se pudo actualizar el producto");
+        res.status(500).json({error: "Error al actualizar producto"+error});
+    }
+})
+
 app.listen(PUERTO);
 
