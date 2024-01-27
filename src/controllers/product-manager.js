@@ -1,9 +1,6 @@
-/* Desafio 3 */
-
 const fs = require('fs').promises;
 
 class ProductManager {
-    static id = 0;
 
     constructor(path) {
         this.products = [];
@@ -18,31 +15,40 @@ class ProductManager {
       }
   }
 
-    async addProduct(product) {
-        /* Campos Obligatorios */
-        if (!product.title || !product.description || !product.price || !product.thumbnail || !product.code || !product.stock) {
-          console.error('Todos los campos son obligatorios.');
-          return;
-        }
-    
-        /* Campo Code único */
-        if (this.products.some(p => p.code === product.code)) {
-          console.error('Ya existe un producto con este código.');
-          return;
-        }
-    
-        /* Id automático */
-        const id = ++ProductManager.id;
+  async addProduct(product) {
+    /* Obtener productos actuales */
+    const products = await this.getProducts();
 
-        /* Crear Objeto */
-        const newProduct = { id, ...product };
-
-        /* Agregar al Array */
-        this.products.push(newProduct);
-        console.log(`Producto agregado: ${newProduct.title}`);
-
-        await this.saveProducts(this.products);
+    /* Campos Obligatorios */
+    if (!product.title || !product.description || !product.price || !product.category || !product.code || !product.stock) {
+      console.error('Todos los campos son obligatorios.');
+      return;
     }
+
+    /* Campo Code único */
+    if (products && products.some(p => p.code === product.code)) {
+      console.error('Ya existe un producto con este código.');
+      return;
+    }
+
+    /* Id automático */
+    let id;
+    if (products && products.length > 0) {
+      id = parseInt(products[products.length - 1].id)+ 1;
+    } else {
+      id = ++ProductManager.id;
+    }
+
+    /* Crear Objeto */
+    const newProduct = { id, ...product };
+
+    /* Agregar al Array */
+    this.products.push(newProduct);
+    console.log(`Producto agregado: ${JSON.stringify(newProduct)}`);
+
+    /* Guardar productos actualizados */
+    await this.saveProducts(this.products);
+}
 
     async getProducts() {
         try {
