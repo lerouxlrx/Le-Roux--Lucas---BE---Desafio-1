@@ -15,7 +15,7 @@ class ProductManager {
       }
   }
 
-  async addProduct(product) {
+    async addProduct(product) {
     /* Obtener productos actuales */
     const products = await this.getProducts();
 
@@ -48,7 +48,7 @@ class ProductManager {
 
     /* Guardar productos actualizados */
     await this.saveProducts(this.products);
-}
+  }
 
     async getProducts() {
         try {
@@ -56,7 +56,7 @@ class ProductManager {
           this.products = JSON.parse(data);
           return this.products;
         } catch (error) {
-          console.log("No se pudo leer el archivo. Error");
+          console.log("No se pudo leer el archivo. Error", error);
       }
     }
 

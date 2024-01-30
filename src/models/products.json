@@ -129,16 +129,5 @@
     "description": "Estabilizador negro, con 8 entradas planas.",
     "code": "040003",
     "status": "true"
-  },
-  {
-    "id": 13,
-    "code": "0050001",
-    "title": "UPS Negra simple",
-    "price": "30000",
-    "category": "UPS",
-    "thumbnails": "https://www.voragolive.com/images2/cat_articulos/369__imagen_1677185036.jpg",
-    "stock": "12",
-    "description": "UPS clasica negra",
-    "status": "true"
   }
 ]
