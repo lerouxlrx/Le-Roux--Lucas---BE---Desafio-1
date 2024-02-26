@@ -1,41 +1,19 @@
-body, #seccionProductos {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
-
-* {
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-}
-
-.card, .contenedorProducto {
-    display: flex;
-    flex-direction: column;
-    width: 300px;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.imagen {
-    max-width: 100%;
-    height: auto;
-    max-height: 200px;
-}
-
-.titulo {
-    color: #07073b;
-    font-size: 24px;
+h1 {
+    color:red; 
     text-align: center;
 }
 
-.precio {
-    color: #8e3c10;
-    font-size: 20px;
+.contenedorCards {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
-.descripcion {
-    color: rgb(49, 44, 138);
-    font-size: 16px;
-    font-style: italic;
+.card {
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    margin: 10px;
+    padding: 10px;
+    min-width: 200px;
 }

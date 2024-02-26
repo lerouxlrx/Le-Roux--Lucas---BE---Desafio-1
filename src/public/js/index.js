@@ -1,61 +1,41 @@
-/* console.log('Estoy funcionando, JS desde Public.') */
+//Instancia de socket.io del lado del cliente 
+const socket = io(); 
 
-//Conectar socket
-const socket = io();
-//Reco productos
-socket.on("productos", (data) => {
-    console.log(data)
-    renderizarProductos(data)
-});
+//Variable usuario: 
+let user; 
+const chatBox = document.getElementById("chatBox");
 
-//Funciones
-    //Renderizado productos
-const renderizarProductos = (productos) => {
-    const seccionProductos = document.getElementById("seccionProductos");
-    seccionProductos.innerHTML = "";
-
-    productos.forEach(item => {
-        const contenedorProducto = document.createElement("article");
-        contenedorProducto.classList.add("contenedorProducto");
-
-        contenedorProducto.innerHTML = `
-        <h4 class="categoria">${item.category}</h4>        
-        <h2 class="titulo">${item.title}   -   ${item.code}</h2>
-        <h3 class="precio">Precio:${item.price}</h3>
-        <img  class="imagen" src="${item.thumbnails}" alt="Imagen">
-        <h5 class="descripcion">Descripción: ${item.description}</h5>
-        <button>Eliminar</button>
-        `;
-
-        seccionProductos.appendChild(contenedorProducto)
-
-            //Eliminar
-        contenedorProducto.querySelector("button").addEventListener("click", ()=> {
-            eliminarProducto(item.id)
-        })
-    })
-}
-
-    //Eliminar producto
-const eliminarProducto = (id) => {
-    socket.emit("eliminarProducto", id)
-}
-
-    //Agregar producto
-document.getElementById('btnEnviar').addEventListener("click", () =>{
-    agregarProducto()
+Swal.fire({
+    title: "Identificate", 
+    input: "text",
+    text: "Ingresa un usuario para identificarte en el chat", 
+    inputValidator: (value) => {
+        return !value && "Necesitas escribir un nombre para continuar"
+    }, 
+    allowOutsideClick: false,
+}).then( result => {
+    user = result.value;
 })
 
-const agregarProducto = () => {
-    const producto = {
-        title: document.getElementById("title").value,
-        description: document.getElementById("description").value,
-        price: document.getElementById("price").value,
-        thumbnails: document.getElementById("thumbnails").value,
-        code: document.getElementById("code").value,
-        stock: document.getElementById("stock").value,
-        category: document.getElementById("category").value,
-    }
 
-    socket.emit("agregarProducto", producto)
-}
+chatBox.addEventListener("keyup", (event) => {
+    if(event.key === "Enter") {
+        if(chatBox.value.trim().length > 0) { 
+            socket.emit("message", {user: user, message: chatBox.value}); 
+            chatBox.value = "";
+        }
+    }
+})
+
+//Escuchar mensajes: 
+
+socket.on("message", data => {
+    let log = document.getElementById("messagesLogs");
+    let messages = "";
+
+    data.forEach( message => {
+        messages = messages + `${message.user} dice: ${message.message} <br>`
+    })
+
+    log.innerHTML = messages;
+})
