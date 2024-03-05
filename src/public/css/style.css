@@ -1,19 +1,41 @@
-h1 {
-    color:red; 
-    text-align: center;
+#seccionProductos {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
 }
 
-.contenedorCards {
+* {
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.card, .contenedorProducto {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    width: 300px;
     align-items: center;
     flex-wrap: wrap;
 }
 
-.card {
-    border: 1px solid #ccc;
-    border-radius: 2px;
-    margin: 10px;
-    padding: 10px;
-    min-width: 200px;
+.imagen {
+    max-width: 100%;
+    height: auto;
+    max-height: 200px;
+}
+
+.titulo {
+    color: #07073b;
+    font-size: 24px;
+    text-align: center;
+}
+
+.precio {
+    color: #8e3c10;
+    font-size: 20px;
+}
+
+.descripcion {
+    color: rgb(49, 44, 138);
+    font-size: 16px;
+    font-style: italic;
 }

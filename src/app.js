@@ -34,8 +34,8 @@ const httpServer = app.listen(PUERTO, ()=>{
     console.log(`Puerto ${PUERTO} activo`)
 });
 
-//Chat
-const MessageModel = require("./models/message.model.js");
+//Chat Complementario
+/* const MessageModel = require("./models/message.model.js");
 const io = new socket.Server(httpServer);
 
 io.on("connection",  (socket) => {
@@ -52,7 +52,7 @@ io.on("connection",  (socket) => {
         io.sockets.emit("message", messages);
      
     })
-})
+}) */
 
 // Desafio 4
 /* //Config Socket con Array

@@ -59,4 +59,57 @@ router.post("/carts/:cid/products/:pid", async (req, res) => {
     }
 });
 
+router.delete("/carts/:cid/products/:pid", async (req, res) => {
+    const cartId = req.params.cid;
+    const productId = req.params.pid;
+
+    try {
+        await cartManager.deleteProductFromCart(cartId, productId);
+        
+        res.json({ message: `Producto eliminado del carrito ${cartId}.`, productId });
+    } catch (error) {
+        console.log("Error al eliminar el producto del carrito:", error);
+        res.status(500).json({ error: "Error al eliminar el producto del carrito." });
+    }
+});
+
+router.put("/carts/:cid", async (req, res) => {
+    const cartId = req.params.cid;
+    const updatedProducts = req.body.products;
+
+    try {
+        await cartManager.updateCart(cartId, updatedProducts);
+        res.status(200).json({ message: `Carrito con ID ${cartId} actualizado correctamente.` });
+    } catch (error) {
+        console.log("Error al actualizar el carrito:", error);
+        res.status(500).json({ error: "Error al actualizar el carrito." });
+    }
+})
+
+router.put("/carts/:cid/products/:pid", async (req, res) => {
+    const cartId = req.params.cid;
+    const productId = req.params.pid;
+    const newQuantity = req.body.quantity;
+
+    try {
+        await cartManager.updateProductQuantityInCart(cartId, productId, newQuantity);
+        res.status(200).json({ message: `Se actualizó la cantidad del producto en el carrito ${cartId}.` });
+    } catch (error) {
+        console.log("Error al actualizar la cantidad del producto en el carrito:", error);
+        res.status(500).json({ error: "Error al actualizar la cantidad del producto en el carrito." });
+    }
+})
+
+router.delete("/carts/:cid", async (req, res) => {
+    const cartId = req.params.cid;
+    
+    try {
+        await cartManager.deleteAllProductsFromCart(cartId);
+        res.json({ message: `Se eliminaron todos los productos del carrito ${cartId}.` });
+    } catch (error) {
+        console.log("No se pudo eliminar todos los productos del carrito:", error);
+        res.status(500).json({ error: "Error al eliminar todos los productos del carrito." });
+    }
+})
+
 module.exports = router
