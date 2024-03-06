@@ -33,7 +33,7 @@ class CartManager {
         try {
             const cart = await CartModel.findById(cartId);
 
-            if(!CartModel) {
+            if(!cart) {
                 console.log(`No se encontro el carrito con el ID: ${cartId}`)
                 return null;
             }

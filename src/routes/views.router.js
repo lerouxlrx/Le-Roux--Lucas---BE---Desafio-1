@@ -2,8 +2,11 @@ const express = require("express");
 const router = express.Router(); 
 const ProductModel = require('../models/product.model.js');
 const ProductManager = require('../controllers/product.manager.db.js');
+const CartManager = require("../controllers/cart.manager.db.js");
+const productManager = new ProductManager();
+const cartManager = new CartManager();
 
-router.get("/", async (req,res) => {
+router.get("/products", async (req,res) => {
    const limit = req.query.limit || 10;
    const page = req.query.page || 1;
    const query = req.query.query || null;
@@ -30,14 +33,38 @@ router.get("/", async (req,res) => {
          nextLink: (productos.nextPage) ? "/?page="+productos.nextPage : null,
        }
 
-       res.json(objetoResultado)
-       //res.render("productos", objetoResultado)
+       //res.json(objetoResultado)
+       res.render("productos", objetoResultado)
 
    } catch (error) {
        console.log ("No se pudieron traer los productos");
        res.status(500).json({error: "Error al leer productos."});
    }
 })
+
+router.get("/carts/:cid", async (req, res) => {
+  const id = req.params.cid;
+
+  try {
+     const cart = await cartManager.getCartById(id);
+
+     if(cart) {
+      const productsInCart = cart.products.map(item => ({
+        product: item.product,
+        quantity: item.quantity
+      }))
+      res.render("carts", { productos: productsInCart })
+    } else {
+        res.json({error: "No se encontro un carrito con dicho ID"})
+    }
+    
+
+;
+  } catch (error) {
+     console.error("Error al obtener el carrito", error);
+     res.status(500).json({ error: "Error interno del servidor" });
+  }
+});
 
 
 module.exports = router; 
