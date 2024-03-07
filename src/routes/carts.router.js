@@ -3,6 +3,8 @@ const router = express.Router();
 
 const CartManager = require('../controllers/cart.manager.db.js')
 const cartManager = new CartManager()
+const CartModel = require("../models/cart.models.js");
+
 
 router.get("/carts", async (req,res) => {
     try {
@@ -27,7 +29,7 @@ router.get("/carts/:cid", async (req, res) => {
         if(cart) {
             res.json(cart.products);
         } else {
-            res.json({error: "No se encontro un carrito con dicho ID"})
+            res.json({error: "No se encontro un carrito con dicho ID desde el router"})
         }
     } catch (error) {
         console.log ("No se pudo traer el carrito por ID");

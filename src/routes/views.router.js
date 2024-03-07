@@ -50,10 +50,11 @@ router.get("/carts/:cid", async (req, res) => {
 
      if(cart) {
       const productsInCart = cart.products.map(item => ({
-        product: item.product,
+        product: item.product.toObject(),
         quantity: item.quantity
       }))
-      res.render("carts", { productos: productsInCart })
+      console.log(productsInCart)
+      res.render("carts", { products: productsInCart })
     } else {
         res.json({error: "No se encontro un carrito con dicho ID"})
     }

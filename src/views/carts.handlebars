@@ -1,8 +1,15 @@
 <h1>Carrito</h1>
 
-{{#each productos}}
-  <div>
-    <p>Producto: {{this.product.title}}</p>
+{{#each products}}
+  <div class="carrito-producto">
+    <div class="carrito-producto-info">
+      <img src="{{this.product.thumbnails}}" alt="{{this.product.title}}">
+      <div>
+        <p class="titulo">{{this.product.title}}</p>
+        <p class="descripcion">{{this.product.description}}</p>
+      </div>
+    </div>
+    <p class="precio"> Precio unitario: ${{this.product.price}}</p>
     <p>Cantidad: {{this.quantity}}</p>
   </div>
 {{/each}}

@@ -1,5 +1,4 @@
 const CartModel = require("../models/cart.models.js");
-const ProductModel = require("../models/product.model");
 
 class CartManager {
     
