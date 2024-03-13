@@ -1,12 +1,20 @@
+* {
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
 #seccionProductos {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: space-around;
     flex-wrap: wrap;
 }
 
-* {
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+.articuloProductos {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
 }
 
 .card, .contenedorProducto {
@@ -40,7 +48,6 @@
     font-style: italic;
 }
 
-
 .carrito-producto {
     margin-bottom: 10px;
     padding: 10px;
@@ -63,4 +70,77 @@
 
 .carrito-producto-info p {
     margin: 0;
+}
+
+/* Estilos comunes login y register*/
+.tituloUsuarios {
+    font-size: 24px;
+    text-align: center;
+}
+
+.tituloLogin, .tituloRegister {
+    margin-bottom: 20px;
+}
+
+.datoForm {
+    margin-bottom: 15px;
+}
+
+.btnForm {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.btnDiv {
+    display: flex;
+    justify-content: center;
+}
+
+/* Estilos específicos login y register */
+.registerForm, .loginForm {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.contenedorForm {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.subtitUsuarios {
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Datos usuarios */
+
+.datosUsuario {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+.contenedorPerfil {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 0;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 400px;
+    margin: 0 auto;
 }

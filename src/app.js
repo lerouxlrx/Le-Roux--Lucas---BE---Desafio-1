@@ -1,10 +1,16 @@
 const express = require("express");
+const exphbs = require("express-handlebars");
+const socket = require ("socket.io");
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
+const productsRouter = require('../src/routes/products.router.js');
+const cartsRouter = require('../src/routes/carts.router.js');
+const viewsRouter = require('../src/routes/views.router.js');
+const userRouter = require("./routes/user.router.js");
+const sessionRouter = require("./routes/sessions.router.js");
 const app = express();
 const PUERTO = 8080;
-//Handlebars
-const exphbs = require("express-handlebars")
-//Socket
-const socket = require ("socket.io")
 //Activamos mongoose
 require("./database.js")
 
@@ -12,21 +18,24 @@ require("./database.js")
 app.engine("handlebars", exphbs.engine());
 app.set("view engine", "handlebars")
 app.set("views", './src/views')
-
-//Carpeta public
+//Public+Middleware
 app.use(express.static("./src/public"));
-
-
-const productsRouter = require('../src/routes/products.router.js');
-const cartsRouter = require('../src/routes/carts.router.js');
-const viewsRouter = require('../src/routes/views.router.js')
-
-
 app.use(express.urlencoded({extended: true}));
 app.use(express.json())
+app.use(cookieParser());
+app.use(session({
+    secret:"secretCoder",
+    resave: true, 
+    saveUninitialized:true,   
+    store: MongoStore.create({
+        mongoUrl: "mongodb+srv://lerouxlrx:coderhouse@cluster0.0y4hyug.mongodb.net/eccomerce?retryWrites=true&w=majority&appName=Cluster0", ttl: 100
+    })
+}))
 
 app.use("/api", productsRouter);
 app.use("/api", cartsRouter);
+app.use("/api/users", userRouter);
+app.use("/api/sessions", sessionRouter);
 app.use("/", viewsRouter);
 
 

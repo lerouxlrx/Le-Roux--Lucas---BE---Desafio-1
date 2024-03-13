@@ -1,0 +1,17 @@
+<h1 class="tituloLogin tituloForm tituloUsuarios">Login</h1>
+<form class="loginForm contenedorForm" action="/api/sessions/login" method="POST">
+    <div class="datoLogin emailLogin datoForm emailForm">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+    </div>
+    <div class="datoLogin passwordLogin datoForm passwordForm">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+    </div>
+    <div class="btnDiv loginDiv">
+       <button class="btnLogin btnForm" type="submit">Login</button>
+    </div>
+    <div class="btnDiv registerDiv">
+        <a class="btnRegiser" href="/register">Registrarme</a>
+    </div>
+</form>
