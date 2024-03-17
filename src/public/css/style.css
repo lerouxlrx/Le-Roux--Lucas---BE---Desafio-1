@@ -144,3 +144,24 @@
     max-width: 400px;
     margin: 0 auto;
 }
+
+.btnGithub {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .btnGithub button {
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .btnGithub button:hover {
+    background-color: #555;
+  }
