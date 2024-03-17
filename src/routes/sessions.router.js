@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const UserModel = require("../models/user.model.js");
+const { isValidPassword } = require("../utils/hashbcryp.js");
 
 router.post("/login", async (req, res) => {
     const { email, password } = req.body;
@@ -14,7 +15,7 @@ router.post("/login", async (req, res) => {
     try { 
         const usuario = await UserModel.findOne({ email: email });
         if (usuario) {
-            if(password === usuario.password) {
+            if(isValidPassword(password, usuario)) {
                 req.session.login = true;
                 req.session.user = { ...usuario._doc, role: "user" };
                 res.redirect("/products");

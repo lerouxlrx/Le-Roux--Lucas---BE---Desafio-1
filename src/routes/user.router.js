@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const UserModel = require("../models/user.model.js");
+const { createHash } = require("../utils/hashbcryp.js");
+
 
 router.post("/", async (req, res) => {
     const {first_name, last_name, email, password, age} = req.body;
@@ -13,7 +15,7 @@ router.post("/", async (req, res) => {
             first_name,
             last_name, 
             email,
-            password, 
+            password: createHash(password), 
             age
         }); 
 
