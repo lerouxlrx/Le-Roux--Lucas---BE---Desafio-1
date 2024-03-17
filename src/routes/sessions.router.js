@@ -2,8 +2,9 @@ const express = require("express");
 const router = express.Router();
 const UserModel = require("../models/user.model.js");
 const { isValidPassword } = require("../utils/hashbcryp.js");
-
-router.post("/login", async (req, res) => {
+const passport = require("passport")
+//Login sin passport
+/* router.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
     if (email === 'adminCoder@coder.com' && password === 'adminCod3r123') {
@@ -28,6 +29,22 @@ router.post("/login", async (req, res) => {
     } catch (error) {
         res.status(400).send({ error: "Error al intentar loguearse." });
     }
+}) */
+
+//Login con passport
+router.post("/login", passport.authenticate("login", {failureRedirect: "/api/sessions/faillogin"}), async (req, res) => {
+    if(!req.user) return res.status(400).send({status:"error"})
+
+    req.session.user = {
+        first_name: req.user.first_name,
+        last_name: req.user.last_name,
+        age: req.user.age,
+        email: req.user.email
+    };
+
+    req.session.login = true;
+
+    res.redirect("/products");
 })
 
 router.get("/faillogin", async (req, res) => {

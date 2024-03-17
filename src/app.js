@@ -9,6 +9,8 @@ const cartsRouter = require('../src/routes/carts.router.js');
 const viewsRouter = require('../src/routes/views.router.js');
 const userRouter = require("./routes/user.router.js");
 const sessionRouter = require("./routes/sessions.router.js");
+const initializePassport = require("./config/passport.config.js");
+const passport = require("passport");
 const app = express();
 const PUERTO = 8080;
 //Activamos mongoose
@@ -21,7 +23,7 @@ app.set("views", './src/views')
 //Public+Middleware
 app.use(express.static("./src/public"));
 app.use(express.urlencoded({extended: true}));
-app.use(express.json())
+app.use(express.json());
 app.use(cookieParser());
 app.use(session({
     secret:"secretCoder",
@@ -31,6 +33,10 @@ app.use(session({
         mongoUrl: "mongodb+srv://lerouxlrx:coderhouse@cluster0.0y4hyug.mongodb.net/eccomerce?retryWrites=true&w=majority&appName=Cluster0", ttl: 100
     })
 }))
+//Passport
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use("/api", productsRouter);
 app.use("/api", cartsRouter);
