@@ -1,4 +1,5 @@
-const ProductModel = require("../models/product.model.js");
+const ProductRepository = require("../repositories/product.repository.js");
+const productRepository = new ProductRepository(); 
 
 class ProductManager {
     async addProduct({title, description, price, thumbnails,code,stock,category}) {
@@ -7,15 +8,12 @@ class ProductManager {
                 console.log("Se requieren todos los campos")
                 return;
             };
-
-            const productExisting = await ProductModel.findOne({code: code});
-
-            if(existeProducto){
+            const productExisting = await productRepository.findByID({code: code});
+            if(productExisting){
                 console.log("El código de producto no se puede repetir.")
                 return;
             };
-
-            const newProduct = new ProductModel({
+            const newProduct = await productRepository.createProduct ({
                 title,
                 description,
                 price,
@@ -26,7 +24,6 @@ class ProductManager {
                 status: true,
             });
 
-            await newProduct.save();
         } catch (error) {
             console.log("Error al agregar producto: ", error)
         }
@@ -34,7 +31,7 @@ class ProductManager {
 
     async getProducts() {
         try {
-            const productos = await ProductModel.find();
+            const productos = await productRepository.findAll();
             return productos;
         } catch (error) {
             console.log("Error al cargar productos: ", error)
@@ -43,7 +40,7 @@ class ProductManager {
 
     async getProductById(id) {
         try {
-            const product = await ProductModel.findById(id);
+            const product = await productRepository.findByID(id);
             if(!product){
                 console.log(`Producto con ID ${id} no encontrado.`);
                 return null;
@@ -57,7 +54,7 @@ class ProductManager {
 
     async updateProduct(id, productUpdate) {
         try {
-            const product = await ProductModel.findByIdAndUpdate(id, productUpdate);
+            const product = await productRepository.updateProduct(id, productUpdate);
 
             if(!product){
                 console.log(`Producto con ID ${id} no encontrado para actualizar.`);
@@ -72,7 +69,7 @@ class ProductManager {
 
     async deleteProduct (id, productDelete) {
         try {
-            const product = await ProductModel.findByIdAndDelete(id, productDelete);
+            const product = await productRepository.deleteProduct(id);
 
             if(!product){
                 console.log(`Producto con ID ${id} no encontrado para eliminar.`);

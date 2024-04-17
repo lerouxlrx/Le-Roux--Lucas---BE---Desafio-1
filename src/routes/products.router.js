@@ -6,7 +6,7 @@ const ProductModel = require('../models/product.model.js');
 const productManager = new ProductManager()
 
 router.get("/products", async (req,res) => {
-    const limit = req.query.limit || 10;
+    const limit = req.query.limit || 20;
     const page = req.query.page || 1;
     const query = req.query.query || null;
     const sort = req.query.sort || null;
@@ -16,7 +16,7 @@ router.get("/products", async (req,res) => {
         const status = (productos) ? "success" : "error"
  
         const productosResultados = productos.docs.map(producto => {
-          const {_id, ...rest} = producto.toObject();
+          const {id, ...rest} = producto.toObject();
           return rest;
         })
         const objetoResultado = {

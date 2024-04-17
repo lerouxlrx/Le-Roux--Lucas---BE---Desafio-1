@@ -1,11 +1,12 @@
 const CartModel = require("../models/cart.models.js");
+const CartRepository = require("../repositories/cart.repository.js");
+const cartRepository = new CartRepository(); 
 
 class CartManager {
     
     async createCart() {
         try {
-            const newCart = new CartModel({products: []});
-            await newCart.save();
+            const newCart = await cartRepository.createCart({products: []})
             console.log(`Carrito creado: ${newCart}`)
             return newCart
         } catch (error) {
@@ -15,13 +16,11 @@ class CartManager {
 
     async getCarts() {
         try {
-            const carts = await CartModel.find();
-
+            const carts = await cartRepository.findAll();
             if(!carts) {
                 console.log(`No se encontro ningun carrito`)
                 return null;
             }
-
             return carts;
         } catch (error) {
             console.log("Error al buscar carritos", error);
@@ -30,7 +29,7 @@ class CartManager {
 
     async getCartById(cartId) {
         try {
-            const cart = await CartModel.findById(cartId);
+            const cart = await cartRepository.findByID(cartId);
 
             if(!cart) {
                 console.log(`No se encontro el carrito con el ID: ${cartId}`)
@@ -55,7 +54,7 @@ class CartManager {
 
             cart.markModified("products")
 
-            await cart.save();
+            await cartRepository.saveCart(cart);
             return cart;
         } catch (error) {
             console.log(`Error al intentar agregar producto al carrito con ID: ${cartId}`, error);
@@ -68,7 +67,7 @@ class CartManager {
     
             cart.products = cart.products.filter(item => item.product.toString() !== productId);
     
-            await cart.save();
+            await cartRepository.saveCart(cart);
             return cart;
         } catch (error) {
             throw new Error("Error al eliminar el producto del carrito.");
@@ -77,7 +76,7 @@ class CartManager {
 
     async updateCart(cartId, updatedProducts) {
         try {
-            const cart = await CartModel.findById(cartId);
+            const cart = await this.getCartById(cartId);
     
             if (!cart) {
                 console.log(`Carrito con ID ${cartId} no encontrado.`);
@@ -86,7 +85,7 @@ class CartManager {
     
             cart.products = updatedProducts;
 
-            await cart.save();
+            await cartRepository.saveCart(cart);
             console.log(`Carrito actualizado con ID: ${cartId}`);
             return cart;
         } catch (error) {
@@ -97,7 +96,7 @@ class CartManager {
 
     async updateProductQuantityInCart(cartId, productId, newQuantity) {
         try {
-            const cart = await CartModel.findById(cartId);
+            const cart = await this.getCartById(cartId);
 
             if (!cart) {
                 throw new Error(`No se encontró el carrito con el ID ${cartId}.`);
@@ -111,7 +110,7 @@ class CartManager {
 
             cart.products[productIndex].quantity = newQuantity;
 
-            await cart.save();
+            await cartRepository.saveCart(cart);
 
             console.log(`Se actualizó la cantidad del producto ${productId} en el carrito ${cartId} a ${newQuantity}.`);
         } catch (error) {
@@ -122,7 +121,7 @@ class CartManager {
 
     async deleteAllProductsFromCart(cartId) {
         try {
-            const cart = await CartModel.findById(cartId);
+            const cart = await this.getCartById(cartId);
 
             if (!cart) {
                 throw new Error(`No se encontró el carrito con el ID ${cartId}.`);
@@ -130,7 +129,7 @@ class CartManager {
 
             cart.products = [];
 
-            await cart.save();
+            await cartRepository.saveCart(cart);
 
             console.log(`Se eliminaron todos los productos del carrito ${cartId}.`);
         } catch (error) {

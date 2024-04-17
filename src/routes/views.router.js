@@ -7,7 +7,7 @@ const productManager = new ProductManager();
 const cartManager = new CartManager();
 
 router.get("/products", async (req,res) => {
-   const limit = req.query.limit || 10;
+   const limit = req.query.limit || 20;
    const page = req.query.page || 1;
    const query = req.query.query || null;
    const sort = req.query.sort || null;
