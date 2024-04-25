@@ -2,57 +2,46 @@ const ProductRepository = require("../repositories/product.repository.js");
 const productRepository = new ProductRepository(); 
 
 class ProductManager {
-    async addProduct({title, description, price, thumbnails,code,stock,category}) {
+    async getProducts(req, res) {
         try {
-            if (!title|| !description|| !price|| !code|| !stock|| !category) {
-                console.log("Se requieren todos los campos")
-                return;
-            };
-            const productExisting = await productRepository.findByID({code: code});
-            if(productExisting){
-                console.log("El código de producto no se puede repetir.")
-                return;
-            };
-            const newProduct = await productRepository.createProduct ({
-                title,
-                description,
-                price,
-                thumbnails,
-                code,
-                stock,
-                category,
-                status: true,
-            });
-
+            const product = await productRepository.findAll();
+            if(product) {
+                res.json(product);
+            } else {
+                res.json({error: "No se encontro ningun producto"})
+            }
         } catch (error) {
-            console.log("Error al agregar producto: ", error)
+            res.status(500).json({error: "Error en el proceso de leer productos"});
         }
     }
 
-    async getProducts() {
-        try {
-            const productos = await productRepository.findAll();
-            return productos;
-        } catch (error) {
-            console.log("Error al cargar productos: ", error)
-        }
-    }
-
-    async getProductById(id) {
+    async getProductById(req, res) {
+        const id = req.params.pid
         try {
             const product = await productRepository.findByID(id);
             if(!product){
                 console.log(`Producto con ID ${id} no encontrado.`);
                 return null;
             }
-            console.log("Producto encontrado");
-            return product;
+            res.json(product);
         } catch (error) {
-            console.log(`Error al cargar producto con ID : ${id}`, error);
+            res.status(500).json({error: "Error en el proceso de leer producto por ID"});
         }
     }
 
-    async updateProduct(id, productUpdate) {
+    async addProduct(req, res) {
+        const newProduct = req.body;
+        try {
+            const result = await productRepository.createProduct(newProduct);
+            res.json(result)
+        } catch (error) {
+            console.log("Error al agregar producto: ", error)
+        }
+    }
+
+    async updateProduct(req, res) {
+        let id = req.params.pid;
+        const productUpdate = req.body;
         try {
             const product = await productRepository.updateProduct(id, productUpdate);
 
@@ -60,25 +49,20 @@ class ProductManager {
                 console.log(`Producto con ID ${id} no encontrado para actualizar.`);
                 return null;
             }
-            console.log("Producto actualizado");
-            return product;
+            res.json({message: "Se actualizo el producto."});
         } catch (error) {
-            console.log(`Error al actualizar producto con ID : ${id}`, error);
+            res.status(500).json({error: "Error al actualizar producto"+error});
         }
     }
 
-    async deleteProduct (id, productDelete) {
+    async deleteProduct (req, res) {
+        let id = req.params.pid;
         try {
             const product = await productRepository.deleteProduct(id);
 
-            if(!product){
-                console.log(`Producto con ID ${id} no encontrado para eliminar.`);
-                return null;
-            }
-            console.log("Producto eliminado");
-            return product;
+            res.json(product);
         } catch (error) {
-            console.log(`Error al eliminar producto con ID : ${id}`, error);
+            res.status(500).json({error: "Error al eliminar producto"+error});
         } 
     }
 }

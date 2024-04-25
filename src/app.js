@@ -38,8 +38,8 @@ initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use("/api", productsRouter);
-app.use("/api", cartsRouter);
+app.use("/api/products", productsRouter);
+app.use("/api/carts", cartsRouter);
 app.use("/api/users", userRouter);
 app.use("/api/sessions", sessionRouter);
 app.use("/", viewsRouter);

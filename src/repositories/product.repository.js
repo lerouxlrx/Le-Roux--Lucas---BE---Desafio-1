@@ -1,12 +1,31 @@
 const ProductModel = require("../models/product.model.js");
 
 class ProductRepository {
-    async createProduct(productData) {
+    async createProduct({title, description, price, thumbnails,code,stock,category}) {
         try {
-            const newProduct = new ProductModel(productData);
+            if (!title|| !description|| !price|| !code|| !stock|| !category) {
+                console.log("Se requieren todos los campos")
+                return;
+            };
+            const productExisting = await ProductModel.findOne({code: code});
+            if(productExisting){
+                console.log("El código de producto no se puede repetir.")
+                return;
+            };
+            const newProduct = new ProductModel ({
+                title,
+                description,
+                price,
+                thumbnails,
+                code,
+                stock,
+                category,
+                status: true,
+            });
             await newProduct.save();
+            return newProduct
         } catch (error) {
-            throw new Error("Error al crear un producto");
+            throw new Error("Error al crear un producto"+error);
         }
     }
     
@@ -40,7 +59,12 @@ class ProductRepository {
     async deleteProduct(id) {
         try {
             const product = await ProductModel.findByIdAndDelete(id);
-            return product
+            if (!product) {
+                console.log("No se encuentra producto con ese ID.");
+                return null;
+            }
+            console.log("Producto eliminado.");
+            return product;
         } catch (error) {
             throw new Error("Error al eliminar producto por ID");
         }
