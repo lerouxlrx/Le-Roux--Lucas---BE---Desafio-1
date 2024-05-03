@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const mongoosePaginate = require("mongoose-paginate-v2");
-const ProductModel = require('./product.model.js');
+const ProductModel = require('./product.models.js');
 
 const cartSchema = new mongoose.Schema({
   products: [

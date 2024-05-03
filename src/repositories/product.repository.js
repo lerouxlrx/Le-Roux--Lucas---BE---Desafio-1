@@ -1,4 +1,4 @@
-const ProductModel = require("../models/product.model.js");
+const ProductModel = require("../models/product.models.js");
 
 class ProductRepository {
     async createProduct({title, description, price, thumbnails,code,stock,category}) {

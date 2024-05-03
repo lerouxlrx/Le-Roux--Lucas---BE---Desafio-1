@@ -3,7 +3,7 @@
 const bcrypt = require("bcrypt");
 
 //Hashear Password:
-const createHash = password => bcrypt.hashSync(password, 10);
+const createHash = password => bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 
 //Validar Password:
 

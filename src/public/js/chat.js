@@ -10,7 +10,7 @@ Swal.fire({
     input: "text",
     text: "Ingresa un usuario para identificarte en el chat", 
     inputValidator: (value) => {
-        return !value && "Necesitas escribir un nombre para continuar"
+        return !value && "Necesitas un nombre para ingresar al chat"
     }, 
     allowOutsideClick: false,
 }).then( result => {
@@ -22,6 +22,7 @@ chatBox.addEventListener("keyup", (event) => {
     if(event.key === "Enter") {
         if(chatBox.value.trim().length > 0) { 
             socket.emit("message", {user: user, message: chatBox.value}); 
+            console.log("el usuario es:"+user)
             chatBox.value = "";
         }
     }
