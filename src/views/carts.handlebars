@@ -12,43 +12,17 @@
     </div>
     <p class="precio"> Precio unitario: ${{this.product.price}}</p>
     <p>Cantidad: {{this.quantity}}</p>
-    <button onclick="deleteProduct('{{this.cartId}}', '{{this.product._id}}')" class="btn btn-danger">Eliminar</button>
+    <button onclick="deleteProduct('{{this.cartId}}', '{{this.product._id}}')">Eliminar</button>
   </div>
 {{/each}}
 </div>
 
-<button onclick="emptyCart('{{cartId}}')" class="btn btn-danger">Vaciar Carrito</button>
+<button onclick="emptyCart('{{cartId}}')">Vaciar Carrito</button>
 <h3 class="mt-2">Total de la compra: ${{totalBuy}}</h3>
+<form action="/api/carts/{{cartId}}/purchase" method="POST">
+<button type="submit">Comprar</button>
+</form>
+<a href="/products">Volver a tienda</a>
+<script src="/js/cart.js"></script>
 
-<script>
-    function deleteProduct(cartId, productId) {
-        fetch(`/api/carts/${cartId}/products/${productId}`, {
-            method: 'DELETE'
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error al eliminar el producto del carrito');
-                }
-                location.reload();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    }
-
-    function emptyCart(cartId) {
-        fetch(`/api/carts/${cartId}`, {
-            method: 'DELETE'
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error al vaciar el carrito');
-                }
-                location.reload();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    }
-</script>
 

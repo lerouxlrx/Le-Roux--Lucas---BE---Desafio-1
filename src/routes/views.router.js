@@ -8,13 +8,11 @@ const passport = require("passport");
 router.get("/products", checkUserRole(['user']),passport.authenticate('jwt', { session: false }), viewsController.renderProducts);
 
 router.get("/carts/:cid", viewsController.renderCart);
-
-//Login + Register + Profile
-
 router.get("/", viewsController.renderProducts);
 router.get("/login", viewsController.renderLogin);
 router.get("/register", viewsController.renderRegister);
 router.get("/realtimeproducts", checkUserRole(['admin']), viewsController.renderRealTimeProducts);
 router.get("/chat", checkUserRole(['user']) ,viewsController.renderChat);
+router.get("/ticket/:tid", viewsController.renderTicket);
 
 module.exports = router; 

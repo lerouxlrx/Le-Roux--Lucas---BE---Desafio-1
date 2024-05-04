@@ -1,6 +1,7 @@
 const ProductModel = require("../models/product.models.js");
 const CartRepository = require("../repositories/cart.repository.js");
 const cartRepository = new CartRepository();
+const TicketModel = require("../models/ticket.models.js");
 
 class ViewsController {
     async renderProducts(req, res) {
@@ -108,6 +109,27 @@ class ViewsController {
 
     async renderHome(req, res) {
         res.render("home");
+    }
+
+    async renderTicket(req, res) {
+        const ticketId = req.params.tid;
+        try {
+            const ticket = await TicketModel.findById(ticketId)
+            if (!ticket) {
+                console.log("No existe ticket dicho ID");
+                return res.status(404).json({ error: "Ticket a renderizar no encontrado por ID" });
+            }
+            console.log(ticket)
+            res.render("ticket", {
+                code: ticket.code,
+                purchase_datetime: ticket.purchase_datetime,
+                amount: ticket.amount,
+                purchaser: ticket.purchaser
+            })
+        } catch (error) {
+            console.error("Error en el proceso de renderizar Ticket.", error);
+            res.status(500).json({ error: "Error en el proceso de renderizar Ticket" });
+        }
     }
 }
 

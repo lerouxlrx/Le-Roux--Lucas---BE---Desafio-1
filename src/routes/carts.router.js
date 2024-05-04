@@ -6,19 +6,13 @@ const cartManager = new CartManager();
 
 
 router.get("/", cartManager.getCarts);
-
 router.get("/:cid", cartManager.getCartById);
-
 router.post("/", cartManager.createCart);
-
 router.post("/:cid/products/:pid", cartManager.addProductToCart);
-
 router.delete("/:cid/products/:pid", cartManager.deleteProductFromCart);
-
 router.put("/:cid", cartManager.updateProductsInCart)
-
 router.put("/:cid/products/:pid", cartManager.updateProductQuantityInCart)
-
 router.delete("/:cid", cartManager.deleteAllProductsFromCart)
+router.post('/:cid/purchase', cartManager.checkOut);
 
 module.exports = router

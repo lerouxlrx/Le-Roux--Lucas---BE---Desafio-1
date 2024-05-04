@@ -1,6 +1,10 @@
-const CartModel = require("../models/cart.models.js");
 const CartRepository = require("../repositories/cart.repository.js");
-const cartRepository = new CartRepository(); 
+const cartRepository = new CartRepository();
+const ProductRepository = require("../repositories/product.repository.js");
+const productRepository = new ProductRepository();
+const TicketModel = require("../models/ticket.models.js");
+const UserModel = require("../models/user.model.js");
+const { generateUniqueCode, calculateTotal } = require("../utils/cartutils.js");
 
 class CartManager {
     
@@ -84,7 +88,6 @@ class CartManager {
         }
     }
     
-
     async updateProductQuantityInCart(req, res) {
         const cartId = req.params.cid;
         const productId = req.params.pid;
@@ -112,6 +115,45 @@ class CartManager {
 
         } catch (error) {
             res.status(500).send("Error en el proceso de eliminar los productos del carrito");
+        }
+    }
+    async checkOut(req, res) {
+        const cartId = req.params.cid;
+        try {
+            const cart = await cartRepository.findByID(cartId);
+            const products = cart.products;
+
+            const productsNotAvailable = [];
+
+            for (const item of products) {
+                const productId = item.product;
+                const product = await productRepository.findByID(productId);
+                if (product.stock >= item.quantity) {
+                    product.stock -= item.quantity;
+                    await product.save();
+                } else {
+                    productsNotAvailable.push(productId);
+                }
+            }
+
+            const userWithCart = await UserModel.findOne({ cart: cartId });
+
+            const ticket = new TicketModel({
+                code: generateUniqueCode(),
+                purchase_datetime: new Date(),
+                amount: calculateTotal(cart.products),
+                purchaser: userWithCart._id
+            });
+            await ticket.save();
+
+            cart.products = cart.products.filter(item => productsNotAvailable.some(productId => productId.equals(item.product)));
+
+            await cart.save();
+
+            res.redirect(`/ticket/${ticket._id}`)
+        } catch (error) {
+            console.error('Error en el proceso de compra.', error);
+            res.status(500).json({ error: 'Error en el proceso de compra.' });
         }
     }
 }
