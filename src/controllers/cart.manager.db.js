@@ -5,6 +5,7 @@ const productRepository = new ProductRepository();
 const TicketModel = require("../models/ticket.models.js");
 const UserModel = require("../models/user.model.js");
 const { generateUniqueCode, calculateTotal } = require("../utils/cartutils.js");
+const transport = require("../config/nodemailer.js");
 
 class CartManager {
     
@@ -147,9 +148,19 @@ class CartManager {
             await ticket.save();
 
             cart.products = cart.products.filter(item => productsNotAvailable.some(productId => productId.equals(item.product)));
-
+            const userEmail = req.user.email;
+            console.log(userEmail)
             await cart.save();
-
+            await transport.sendMail({
+                from: "Teccomerce <lerouxlrx@gmail.com> ",
+                to: userEmail,
+                subject: "Ticket de compra Teccomerce", 
+                html: `<h2>Ticket de Compra</h2>
+                <p>Código de Ticket: ${ticket.code}</p>
+                <p>Fecha de Compra: ${ticket.purchase_datetime}</p>
+                <p>Monto Total: $${ticket.amount}</p>
+                <p>Comprador: ${ticket.purchaser}</p>`,
+            })
             res.redirect(`/ticket/${ticket._id}`)
         } catch (error) {
             console.error('Error en el proceso de compra.', error);

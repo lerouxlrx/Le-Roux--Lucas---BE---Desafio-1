@@ -8,7 +8,7 @@ const passport = require("passport");
 router.get("/products", checkUserRole(['user']),passport.authenticate('jwt', { session: false }), viewsController.renderProducts);
 
 router.get("/carts/:cid", viewsController.renderCart);
-router.get("/", viewsController.renderProducts);
+router.get("/", viewsController.renderLogin);
 router.get("/login", viewsController.renderLogin);
 router.get("/register", viewsController.renderRegister);
 router.get("/realtimeproducts", checkUserRole(['admin']), viewsController.renderRealTimeProducts);
