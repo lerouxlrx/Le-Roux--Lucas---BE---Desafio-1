@@ -41,9 +41,7 @@ class CartRepository {
     async addProductToCart(id, productId, quantity = 1) {
         try {
             const cart = await CartModel.findById(id);
-            console.log(cart)
             const existingProduct = cart.products.find(item => item.product._id.toString() === productId);
-            console.log(existingProduct)
             if (existingProduct) {
                 existingProduct.quantity += quantity;
             } else {

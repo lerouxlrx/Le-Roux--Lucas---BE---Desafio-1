@@ -56,7 +56,8 @@ class CartManager {
         
         try {
             await cartRepository.addProductToCart(cartId,productId,quantity)
-            res.status(201).json({ message: `Producto agregado al carrito ${cartId}.`, productId, quantity });
+            console.log(`Producto agregado al carrito ${cartId}.`, productId, quantity)
+            res.redirect("/products")
         } catch (error) {
             res.status(500).json({ error: "Error al agregar el producto al carrito"+ error });
         }
