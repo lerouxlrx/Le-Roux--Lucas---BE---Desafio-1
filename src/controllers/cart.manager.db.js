@@ -150,7 +150,6 @@ class CartManager {
 
             cart.products = cart.products.filter(item => productsNotAvailable.some(productId => productId.equals(item.product)));
             const userEmail = req.user.email;
-            console.log(userEmail)
             await cart.save();
             await transport.sendMail({
                 from: "Teccomerce <lerouxlrx@gmail.com> ",
