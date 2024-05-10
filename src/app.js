@@ -17,6 +17,7 @@ const productsRouter = require('../src/routes/products.router.js');
 const cartsRouter = require('../src/routes/carts.router.js');
 const viewsRouter = require('../src/routes/views.router.js');
 const userRouter = require("./routes/user.router.js");
+const errorHandler = require("./middleware/error.js");
 
 
 //Public+Middleware
@@ -50,6 +51,7 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/api/users", userRouter);
 app.use("/", viewsRouter);
+app.use(errorHandler);
 
 
 const httpServer = app.listen(PUERTO, ()=>{

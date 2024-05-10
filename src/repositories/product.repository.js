@@ -1,16 +1,27 @@
 const ProductModel = require("../models/product.models.js");
+const { errorInformation, errorExisting } = require("../services/error/info.js");
+const { EErrors } = require("../services/error/enums.js");
+const CustomError = require("../services/error/custom.error.js");
 
 class ProductRepository {
     async createProduct({title, description, price, thumbnails,code,stock,category}) {
         try {
             if (!title|| !description|| !price|| !code|| !stock|| !category) {
-                console.log("Se requieren todos los campos")
-                return;
+                throw CustomError.createError({
+                    name: "Datos incompletos", 
+                    cause: errorInformation({title, description, price,code,stock,category}),
+                    message: "Error al intentar crear el producto por falta de datos",
+                    code: EErrors.Datos_Incompletos
+                })
             };
             const productExisting = await ProductModel.findOne({code: code});
             if(productExisting){
-                console.log("El código de producto no se puede repetir.")
-                return;
+                throw CustomError.createError({
+                    name: "Code repetido", 
+                    cause: errorExisting({code}),
+                    message: "Error al intentar crear el producto por repetir code",
+                    code: EErrors.Producto_Existente
+                })
             };
             const newProduct = new ProductModel ({
                 title,
@@ -25,7 +36,7 @@ class ProductRepository {
             await newProduct.save();
             return newProduct
         } catch (error) {
-            throw new Error("Error al crear un producto"+error);
+            throw error
         }
     }
     

@@ -29,13 +29,13 @@ class ProductManager {
         }
     }
 
-    async addProduct(req, res) {
+    async addProduct(req, res, next) {
         const newProduct = req.body;
         try {
             const result = await productRepository.createProduct(newProduct);
             res.json(result)
         } catch (error) {
-            console.log("Error al agregar producto: ", error)
+           next(error)
         }
     }
 
