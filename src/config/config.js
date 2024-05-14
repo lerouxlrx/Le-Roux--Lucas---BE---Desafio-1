@@ -5,7 +5,8 @@ dotenv.config({
 });
 
 const configObject = {
-    mongo_url: process.env.MONGO_URL
+    mongo_url: process.env.MONGO_URL,
+    node_env: process.env.NODE_ENV || "development"
 }
 
 module.exports = configObject;

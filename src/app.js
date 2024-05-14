@@ -41,6 +41,8 @@ app.use(passport.session());
 
 const authMiddleware = require("./middleware/authmiddleware.js");
 app.use(authMiddleware);
+const addLogger = require("./middleware/logger.js");
+app.use(addLogger);
 
 //Conf Handlebars
 app.engine("handlebars", exphbs.engine());
@@ -52,7 +54,6 @@ app.use("/api/carts", cartsRouter);
 app.use("/api/users", userRouter);
 app.use("/", viewsRouter);
 app.use(errorHandler);
-
 
 const httpServer = app.listen(PUERTO, ()=>{
     console.log(`Puerto ${PUERTO} activo`)

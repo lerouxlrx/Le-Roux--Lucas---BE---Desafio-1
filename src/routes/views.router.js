@@ -28,5 +28,17 @@ router.get("/mockingproducts", (req, res) => {
     res.json(products);
 })
 
+//Logger
+router.get("/loggerTest", (req, res) => {
+    req.logger.fatal("Prueba azul de FATAL.");
+    req.logger.error("Prueba roja de ERROR."); 
+    req.logger.warning("Prueba amarilla de WARNING.");
+    req.logger.http("Prueba magenta de HTTP."); 
+    req.logger.info("Prueba verde de INFO.");
+    req.logger.debug("Prueba blanca de DEBUG.");
+
+
+    res.send("Prueba de LOGS realizada,");
+})
 
 module.exports = router; 

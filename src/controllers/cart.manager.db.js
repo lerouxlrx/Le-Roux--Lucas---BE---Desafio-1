@@ -14,8 +14,8 @@ class CartManager {
             const limit = req.query.limit;
             const carts = await cartRepository.findAll();
             if(!carts) {
-                console.log(`No se encontro ningun carrito`)
-                return null;
+                req.logger.warning(`No se encontró ningún carrito`);
+                return res.status(404).json({ error: "No se encontró ningún carrito" });
             }
             if(limit) {
                 res.json(carts.slice(0, limit));
@@ -23,7 +23,8 @@ class CartManager {
                 res.json(carts)
             }
         } catch (error) {
-            console.log("Error al buscar carritos", error);
+            req.logger.error("Error al buscar carritos", error);
+            res.status(500).json({ error: "Error en el proceso de leer carritos" });
         }
     }
 
@@ -32,19 +33,22 @@ class CartManager {
         try {
             const cart = await cartRepository.findByID(id);
             if(!cart) {
-                return res.status(404).json({error:`No se encontro el carrito con el ID: ${id}`})
+                return res.status(404).json({error:`No se encontró el carrito con el ID: ${id}`})
             }
             res.json(cart)
         } catch (error) {
-            res.status(500).send("Error al buscar el carrito por ID", error);
+            req.logger.error("Error al buscar el carrito por ID", error);
+            res.status(500).send("Error al buscar el carrito por ID");
         }
     }
 
     async createCart(req, res) {
         try {
             const newCart = await cartRepository.createCart({products: []})
+            req.logger.info("Nuevo carrito creado", newCart);
             res.status(201).json({ message: "Nuevo carrito creado.", cart: newCart });
         } catch (error) {
+            req.logger.error("Error al crear el carrito", error);
             res.status(500).json({ error: "Error al crear el carrito" });
         }
     }
@@ -56,9 +60,10 @@ class CartManager {
         
         try {
             await cartRepository.addProductToCart(cartId,productId,quantity)
-            console.log(`Producto agregado al carrito ${cartId}.`, productId, quantity)
+            req.logger.info(`Producto agregado al carrito ${cartId}. Producto: ${productId}, Cantidad: ${quantity}`);
             res.redirect("/products")
         } catch (error) {
+            req.logger.error("Error al agregar el producto al carrito", error);
             res.status(500).json({ error: "Error al agregar el producto al carrito"+ error });
         }
     }
@@ -69,12 +74,14 @@ class CartManager {
         
         try {
             const updatedCart = await cartRepository.deleteProductFromCart(cartId, productId);
+            req.logger.info(`Producto eliminado del carrito ${cartId}. Producto: ${productId}`);
             res.json({
                 status: 'success',
                 message: 'Producto eliminado del carrito ',
                 updatedCart,
             });
         } catch (error) {
+            req.logger.error("Error en el proceso de eliminar producto del carrito", error);
             res.status(500).send("Error en el proceso de eliminar producto del carrito"+error);
         }
     }
@@ -84,8 +91,10 @@ class CartManager {
         const updatedProducts = req.body.products;
         try {
             const updatedCart = await cartRepository.updateProductsInCart(cartId, updatedProducts);
+            req.logger.info(`Productos actualizados en el carrito ${cartId}.`, updatedProducts);
             res.json(updatedCart);
         } catch (error) {
+            req.logger.error("Error en el proceso de actualizar productos en el carrito", error);
             res.status(500).send("Error en el proceso de actualizar productos en el carrito"+ error);
         }
     }
@@ -97,9 +106,10 @@ class CartManager {
     
         try {
             await cartRepository.updateQuantityInCart(cartId, productId, newQuantity);
+            req.logger.info(`Se actualizó la cantidad del producto en el carrito ${cartId}. Producto: ${productId}, Nueva Cantidad: ${newQuantity}`);
             res.status(200).json({ message: `Se actualizó la cantidad del producto en el carrito ${cartId}.` });
         } catch (error) {
-            console.log("Error al actualizar la cantidad del producto en el carrito:", error);
+            req.logger.error("Error al actualizar la cantidad del producto en el carrito:", error);
             res.status(500).json({ error: "Error al actualizar la cantidad del producto en el carrito." });
         }
     }
@@ -108,7 +118,7 @@ class CartManager {
         const cartId = req.params.cid;
         try {
             const updatedCart = await cartRepository.emptyCart(cartId);
-
+            req.logger.info(`Productos eliminados del carrito ${cartId}.`);
             res.json({
                 status: 'success',
                 message: 'Los productos del carrito fueron eliminados.',
@@ -116,9 +126,11 @@ class CartManager {
             });
 
         } catch (error) {
+            req.logger.error("Error en el proceso de eliminar los productos del carrito", error);
             res.status(500).send("Error en el proceso de eliminar los productos del carrito");
         }
     }
+
     async checkOut(req, res) {
         const cartId = req.params.cid;
         try {
@@ -161,9 +173,10 @@ class CartManager {
                 <p>Monto Total: $${ticket.amount}</p>
                 <p>Comprador: ${ticket.purchaser}</p>`,
             })
+            req.logger.info(`Compra exitosa. Ticket generado: ${ticket.code}`);
             res.redirect(`/ticket/${ticket._id}`)
         } catch (error) {
-            console.error('Error en el proceso de compra.', error);
+            req.logger.error('Error en el proceso de compra.', error);
             res.status(500).json({ error: 'Error en el proceso de compra.' });
         }
     }
