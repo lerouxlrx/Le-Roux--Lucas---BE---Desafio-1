@@ -3,6 +3,9 @@ const CartModel = require("../models/cart.models.js");
 const jwt = require("jsonwebtoken");
 const { createHash, isValidPassword } = require("../utils/hashbcryp.js");
 const UserDTO = require("../dto/user.dto.js");
+const { generateResetToken } = require("../utils/utils.js");
+const EmailManager = require("../services/email.js");
+const emailManager = new EmailManager
 
 class UserController {
     async register(req, res) {
@@ -51,7 +54,7 @@ class UserController {
             const userExisting = await UserModel.findOne({ email });
 
             if (!userExisting) {
-                req.logger.warning(`El correo ${email} ya esta registrado en otro usuario`);
+                req.logger.warning(`El correo ${email} no esta registrado como usuario`);
                 return res.status(401).send("El usuario no existe");
             }
 
@@ -96,6 +99,69 @@ class UserController {
         }
         req.logger.info(`Admin en sección admin`)
         res.render("admin");
+    }
+    async requestPasswordReset(req, res) {
+        const {email} = req.body;
+        try {
+            const user = await UserModel.findOne({ email });
+
+            if (!user) {
+                req.logger.warning(`El correo ${email} no esta registrado como usuario`);
+                return res.render("viewReset", { error: "No se encontró usuario con el email ingresado." });
+            }
+
+            const token = generateResetToken();
+
+            user.resetToken = {
+                token: token,
+                expire: new Date(Date.now()+ 360000)
+            };
+
+            await user.save();
+            await emailManager.resetPassword(email, token)
+            req.logger.info(`Se envio correo para reestablecer contraseña a ${email}`);
+            res.redirect("/mail-reset")
+        } catch (error) {
+            req.logger.error("Error en el proceso de enviar correo de reestablecimiento.",error);
+            res.status(500).send("Error en el proceso de de enviar correo de reestablecimiento.");
+        }
+    }
+    async resetPassword(req, res) {
+        const { email, password, token } = req.body;
+
+        try {
+            const user = await UserModel.findOne({ email });
+            if (!user) {
+                req.logger.warning(`El correo ${email} no esta registrado como usuario`);
+                return res.render("resetPassword", { error: "No se encontró usuario con el email ingresado." });
+            }
+
+            const resetToken = user.resetToken;
+            if (!resetToken || resetToken.token !== token) {
+                req.logger.warning(`El token ingresado no coincide con el token a validar.`);
+                return res.render("viewReset", { error: "El token no coincide con el enviado. Solicitar reestablecimiento nuevamente." });
+            }
+
+            const dateNow = new Date();
+            if (dateNow > resetToken.expiresAt) {
+                req.logger.warning(`El token ingresado ha expirado.`);
+                return res.render("viewReset", { error: "El token ingresado ha expirado." });
+            }
+
+            if (isValidPassword(password, user)) {
+                req.logger.warning(`La contraseña ingresada tiene que ser distinta a la error.`);
+                return res.render("resetPassword", { error: "La contraseña ingresada tiene que ser distinta a la error." });
+            }
+
+            user.password = createHash(password);
+            user.resetToken = undefined;
+            await user.save();
+            req.logger.info(`Contraseña reestablecida para usuario con correo ${email}`);
+            return res.redirect("/password-reset");
+        } catch (error) {
+            req.logger.error(`Error en el proceso de reestablecer contraseña`);
+            return res.status(500).render("reset-password", { error: "Error interno del servidor. Comunicate con el administrador." });
+        }
     }
 }
 

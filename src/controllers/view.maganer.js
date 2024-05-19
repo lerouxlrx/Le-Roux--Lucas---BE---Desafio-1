@@ -131,6 +131,21 @@ class ViewsController {
             res.status(500).json({ error: "Error en el proceso de renderizar Ticket" });
         }
     }
+
+    async renderViewReset(req, res) {
+        res.render("viewReset");
+    }
+
+    async renderResetPassword(req, res) {
+        res.render("resetPassword");
+    }
+
+    async renderMailReset(req, res) {
+        res.render("mailReset");
+    }
+    async renderPasswordReset(req, res) {
+        res.render("passwordReset");
+    }
 }
 
 module.exports = ViewsController;

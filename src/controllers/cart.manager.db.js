@@ -5,7 +5,8 @@ const productRepository = new ProductRepository();
 const TicketModel = require("../models/ticket.models.js");
 const UserModel = require("../models/user.model.js");
 const { generateUniqueCode, calculateTotal } = require("../utils/cartutils.js");
-const transport = require("../config/nodemailer.js");
+const EmailManager = require("../services/email.js");
+const emailManager = new EmailManager
 
 class CartManager {
     
@@ -163,16 +164,7 @@ class CartManager {
             cart.products = cart.products.filter(item => productsNotAvailable.some(productId => productId.equals(item.product)));
             const userEmail = req.user.email;
             await cart.save();
-            await transport.sendMail({
-                from: "Teccomerce <lerouxlrx@gmail.com> ",
-                to: userEmail,
-                subject: "Ticket de compra Teccomerce", 
-                html: `<h2>Ticket de Compra</h2>
-                <p>Código de Ticket: ${ticket.code}</p>
-                <p>Fecha de Compra: ${ticket.purchase_datetime}</p>
-                <p>Monto Total: $${ticket.amount}</p>
-                <p>Comprador: ${ticket.purchaser}</p>`,
-            })
+            await emailManager.buyTicket(ticket,userEmail)
             req.logger.info(`Compra exitosa. Ticket generado: ${ticket.code}`);
             res.redirect(`/ticket/${ticket._id}`)
         } catch (error) {

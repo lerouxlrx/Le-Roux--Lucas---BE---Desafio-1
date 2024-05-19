@@ -15,6 +15,10 @@ router.get("/register", viewsController.renderRegister);
 router.get("/realtimeproducts", checkUserRole(['admin']), viewsController.renderRealTimeProducts);
 router.get("/chat", checkUserRole(['user']) ,viewsController.renderChat);
 router.get("/ticket/:tid", viewsController.renderTicket);
+router.get("/view-reset", viewsController.renderViewReset);
+router.get("/reset-password", viewsController.renderResetPassword);
+router.get("/mail-reset", viewsController.renderMailReset);
+router.get("/password-reset", viewsController.renderPasswordReset);
 
 
 //Mocking
