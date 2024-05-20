@@ -1,17 +1,18 @@
 <h1>Mi Perfil</h1>
 
 <div class="profile-card">
-  <p>Bienvenido, {{user.nombre}} {{user.apellido}}!</p>
-  <p>Rol: {{user.role}}</p>
-
-  <form action="/api/users/logout" method="POST">
-    <button type="submit">Logout</button>
-  </form>
-
+  <p>Bienvenido, {{user.nombre}}!</p>
+  <p>Tu rol: {{user.role}}</p>
   {{#if this.isAdmin}}
     <a href="/realtimeproducts">Modificar Productos</a>
   {{else}}
+  {{#if this.isPremium}}
+    <a href="/realtimeproducts">Seccion Ventas</a>
+  {{/if}}
     <a href="/chat">Chat en vivo</a>
     <a href="/products">Tienda</a>
   {{/if}}
+    <form action="/api/users/logout" method="POST">
+    <button type="submit">Logout</button>
+  </form>
 </div>

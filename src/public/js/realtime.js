@@ -1,22 +1,24 @@
 const socket = io(); 
 
 socket.on("products", (data) => {
-    renderProductos(data);
+    renderProducts(data);
+
 })
 
-const renderProductos = (products) => {
+const renderProducts = (products) => {
     const productsContainer = document.getElementById("productsContainer");
     productsContainer.innerHTML = "";
-    
-    products.docs.forEach(item => {
+
+
+    products.forEach(item => {
         const card = document.createElement("div");
         card.classList.add("card");
 
         card.innerHTML = ` 
-                        <p> ${item.title} </p>
-                        <p> ${item.price} </p>
-                        <button> Eliminar </button>
-                        `;
+            <p> ${item.title} </p>
+            <p> ${item.price} </p>
+            <button> Eliminar </button>
+        `;
 
         productsContainer.appendChild(card);
         card.querySelector("button").addEventListener("click", ()=> {
@@ -41,7 +43,7 @@ const createProduct = () => {
         title: document.getElementById("title").value,
         description: document.getElementById("description").value,
         price: document.getElementById("price").value,
-        img: document.getElementById("img").value,
+        thumbnails: document.getElementById("img").value,
         code: document.getElementById("code").value,
         stock: document.getElementById("stock").value,
         category: document.getElementById("category").value,
