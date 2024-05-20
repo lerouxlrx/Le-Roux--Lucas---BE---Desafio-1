@@ -160,7 +160,26 @@ class UserController {
             return res.redirect("/password-reset");
         } catch (error) {
             req.logger.error(`Error en el proceso de reestablecer contraseña`);
-            return res.status(500).render("reset-password", { error: "Error interno del servidor. Comunicate con el administrador." });
+            return res.status(500).render("resetPassword", { error: "Error interno del servidor. Comunicate con el administrador." });
+        }
+    }
+    async changeRolPremium(req, res) {
+        try {
+            const { uid } = req.params;
+                const user = await UserModel.findById(uid);
+    
+            if (!user) {
+                req.logger.warning(`El correo ${email} no pertenece a ningun usuario.`);
+                return res.render("resetPassword", { error: "No se encontró usuario con el email ingresado." });
+            }
+    
+            const newRole = user.role === 'user' ? 'premium' : 'user';
+    
+            const updateUser = await UserModel.findByIdAndUpdate(uid, { role: newRole }, { new: true });
+            res.json(updateUser);
+        } catch (error) {
+            req.logger.error(`Error en el proceso de cambiar rol de usuario`);
+            res.status(500).json({ message: 'Error en el proceso de cambiar rol de usuario' });
         }
     }
 }
