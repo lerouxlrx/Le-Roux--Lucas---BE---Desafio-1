@@ -95,8 +95,9 @@ class ViewsController {
     }
 
     async renderRealTimeProducts(req, res) {
+        const user = req.user;
         try {
-            res.render("realtimeproducts");
+            res.render("realtimeproducts", {role: user.role, email: user.email});
         } catch (error) {
             console.log("Error en el proceso de renderizar realtimeproducts", error);
             res.status(500).json({ error: "Error en el proceso de renderizar realtimeproducts" });

@@ -60,9 +60,21 @@ class CartManager {
         const quantity = req.body.quantity || 1;
         
         try {
+            const product = await productRepository.findByID(productId);
+
+            if (!product) {
+                req.logger.warning(`Producto no encontrado para agregar al carrito.`);
+                return res.status(404).json({ message: 'Producto no encontrado para agregar al carrito.' });
+            }
+
+            if (req.user.role === 'premium' && product.owner === req.user.email) {
+                req.logger.warning(`No puedes agregar tu producto al carrito.`);
+                return res.status(403).json({ message: 'No puedes agregar tu producto al carrito.' });
+            }
+
             await cartRepository.addProductToCart(cartId,productId,quantity)
             req.logger.info(`Producto agregado al carrito ${cartId}. Producto: ${productId}, Cantidad: ${quantity}`);
-            res.redirect("/products")
+            res.redirect(`/carts/${cartId}`)
         } catch (error) {
             req.logger.error("Error al agregar el producto al carrito", error);
             res.status(500).json({ error: "Error al agregar el producto al carrito"+ error });

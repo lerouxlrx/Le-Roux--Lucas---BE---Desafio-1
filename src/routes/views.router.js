@@ -6,7 +6,7 @@ const checkUserRole = require("../middleware/checkrole.js");
 const passport = require("passport");
 const generateProducts = require("../utils/faker.js");
 
-router.get("/products", checkUserRole(['user']),passport.authenticate('jwt', { session: false }), viewsController.renderProducts);
+router.get("/products", checkUserRole(['user','premium']),passport.authenticate('jwt', { session: false }), viewsController.renderProducts);
 
 router.get("/carts/:cid", viewsController.renderCart);
 router.get("/", viewsController.renderLogin);

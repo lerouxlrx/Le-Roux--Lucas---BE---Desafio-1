@@ -4,7 +4,7 @@ const { EErrors } = require("../services/error/enums.js");
 const CustomError = require("../services/error/custom.error.js");
 
 class ProductRepository {
-    async createProduct({title, description, price, thumbnails,code,stock,category}) {
+    async createProduct({title, description, price, thumbnails,code,stock,category, owner}) {
         try {
             if (!title|| !description|| !price|| !code|| !stock|| !category) {
                 throw CustomError.createError({
@@ -32,6 +32,7 @@ class ProductRepository {
                 stock,
                 category,
                 status: true,
+                owner,
             });
             await newProduct.save();
             return newProduct
