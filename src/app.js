@@ -61,3 +61,8 @@ const httpServer = app.listen(PUERTO, ()=>{
 
 const SocketManager = require("./sockets/socekt.manager.js");
 new SocketManager(httpServer);
+
+const swaggerUiExpress = require('swagger-ui-express');
+const swaggerSpec = require("./config/swagger.js");
+
+app.use('/api-docs', swaggerUiExpress.serve, swaggerUiExpress.setup(swaggerSpec));
