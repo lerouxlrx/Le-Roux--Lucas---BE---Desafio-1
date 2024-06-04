@@ -88,11 +88,7 @@ class CartManager {
         try {
             const updatedCart = await cartRepository.deleteProductFromCart(cartId, productId);
             req.logger.info(`Producto eliminado del carrito ${cartId}. Producto: ${productId}`);
-            res.json({
-                status: 'success',
-                message: 'Producto eliminado del carrito ',
-                updatedCart,
-            });
+            res.status(201).json({ message: "Producto eliminado del carrito.", cartId });
         } catch (error) {
             req.logger.error("Error en el proceso de eliminar producto del carrito", error);
             res.status(500).send("Error en el proceso de eliminar producto del carrito"+error);
@@ -105,7 +101,7 @@ class CartManager {
         try {
             const updatedCart = await cartRepository.updateProductsInCart(cartId, updatedProducts);
             req.logger.info(`Productos actualizados en el carrito ${cartId}.`, updatedProducts);
-            res.json(updatedCart);
+            res.status(201).json({ message: "Carrito Actualizado.", cartId });
         } catch (error) {
             req.logger.error("Error en el proceso de actualizar productos en el carrito", error);
             res.status(500).send("Error en el proceso de actualizar productos en el carrito"+ error);
@@ -132,12 +128,7 @@ class CartManager {
         try {
             const updatedCart = await cartRepository.emptyCart(cartId);
             req.logger.info(`Productos eliminados del carrito ${cartId}.`);
-            res.json({
-                status: 'success',
-                message: 'Los productos del carrito fueron eliminados.',
-                updatedCart,
-            });
-
+            res.status(201).json({ message: "Todos los productos eliminados del carrito.", cartId });
         } catch (error) {
             req.logger.error("Error en el proceso de eliminar los productos del carrito", error);
             res.status(500).send("Error en el proceso de eliminar los productos del carrito");

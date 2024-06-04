@@ -30,7 +30,7 @@ class UserController {
             });
 
             await newUser.save();
-            req.logger.warning(`Usuario creado con correo ${email}`)
+            req.logger.info(`Usuario creado con correo ${email}`)
 
             const token = jwt.sign({ user: newUser }, "teccomerce", {
                 expiresIn: "24h"
@@ -40,8 +40,8 @@ class UserController {
                 maxAge: 3600000,
                 httpOnly: true
             });
-
-            res.redirect("/api/users/profile");
+            
+            res.status(200).json({ token });
         } catch (error) {
             req.logger.error("Error en el proceso de crear usuario",error);
             res.status(500).send("Error interno del servidor");
@@ -63,7 +63,7 @@ class UserController {
                 req.logger.warning(`La contraseña es incorrecta para el correo ${email}`);
                 return res.status(401).send("La contraseña es incorrecta");
             }
-
+            req.logger.info(`Usuario logueado con correo ${email}`)
             const token = jwt.sign({ user: userExisting }, "teccomerce", {
                 expiresIn: "24h"
             });
@@ -73,7 +73,7 @@ class UserController {
                 httpOnly: true
             });
 
-            res.redirect("/api/users/profile");
+            res.status(200).json({ token });
         } catch (error) {
             req.logger.error("Error en el proceso de loguearse",error);
             res.status(500).send("Error en el proceso de login.");
@@ -85,6 +85,7 @@ class UserController {
         const isAdmin = req.user.role === 'admin';
         const isPremium = req.user.role === 'premium';
         res.render("profile", { user: userDto, isAdmin, isPremium });
+        res.status(200).json({ first_name: req.user.first_name, last_name: req.user.last_name, role: req.user.role, isAdmin, isPremium });
     }
 
     async logout(req, res) {
