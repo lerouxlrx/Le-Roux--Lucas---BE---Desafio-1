@@ -47,7 +47,6 @@ class UserController {
             res.status(500).send("Error interno del servidor");
         }
     }
-
     async login(req, res) {
         const { email, password } = req.body;
         try {
@@ -79,21 +78,17 @@ class UserController {
             res.status(500).send("Error en el proceso de login.");
         }
     }
-
     async profile(req, res) { 
         const userDto = new UserDTO(req.user.first_name, req.user.last_name, req.user.role);
         const isAdmin = req.user.role === 'admin';
         const isPremium = req.user.role === 'premium';
         res.render("profile", { user: userDto, isAdmin, isPremium });
-        res.status(200).json({ first_name: req.user.first_name, last_name: req.user.last_name, role: req.user.role, isAdmin, isPremium });
     }
-
     async logout(req, res) {
-        res.clearCookie("coderCookieToken");
+        res.clearCookie("teccomerceCookieToken");
         req.logger.info("Se desconecta usuario y se redirige a Login")
         res.redirect("/login");
     }
-
     async admin(req, res) {
         if (req.user.user.role !== "admin") {
             req.logger.warning("Un usuario que no es admin, intenta entrar a una sección de admin")

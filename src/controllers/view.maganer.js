@@ -52,7 +52,6 @@ class ViewsController {
             });
         }
     }
-
     async renderCart(req, res) {
         const cartId = req.params.cid;
         try {
@@ -85,15 +84,18 @@ class ViewsController {
             res.status(500).json({ error: "Error en el proceso de obtener carrito a renderizar." });
         }
     }
-
     async renderLogin(req, res) {
+        if (req.isAuthenticated()) {
+            return res.redirect("/api/users/profile");
+        }
         res.render("login");
-    }
-
+        }
     async renderRegister(req, res) {
+        if (req.isAuthenticated()) {
+            return res.redirect("/api/users/profile");
+        }
         res.render("register");
     }
-
     async renderRealTimeProducts(req, res) {
         const user = req.user;
         try {
@@ -103,15 +105,12 @@ class ViewsController {
             res.status(500).json({ error: "Error en el proceso de renderizar realtimeproducts" });
         }
     }
-
     async renderChat(req, res) {
         res.render("chat");
     }
-
     async renderHome(req, res) {
         res.render("home");
     }
-
     async renderTicket(req, res) {
         const ticketId = req.params.tid;
         try {
@@ -132,15 +131,12 @@ class ViewsController {
             res.status(500).json({ error: "Error en el proceso de renderizar Ticket" });
         }
     }
-
     async renderViewReset(req, res) {
         res.render("viewReset");
     }
-
     async renderResetPassword(req, res) {
         res.render("resetPassword");
     }
-
     async renderMailReset(req, res) {
         res.render("mailReset");
     }
