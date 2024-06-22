@@ -29,12 +29,20 @@ const userSchema = mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['admin', 'user', 'premum'],
+        enum: ['admin', 'user', 'premium'],
         default: 'user'
     },
     resetToken: {
         token: String,
         expire: Date
+    },
+    documents: [{
+        name: String,
+        reference: String
+    }],
+    lastConnection: {
+        type: Date,
+        default: Date.now
     }
 });
 

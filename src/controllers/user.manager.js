@@ -6,6 +6,9 @@ const UserDTO = require("../dto/user.dto.js");
 const { generateResetToken } = require("../utils/utils.js");
 const EmailManager = require("../services/email.js");
 const emailManager = new EmailManager
+const UserRepository = require("../repositories/user.repository.js");
+const userRepository = new UserRepository();
+
 
 class UserController {
     async register(req, res) {
@@ -40,8 +43,8 @@ class UserController {
                 maxAge: 3600000,
                 httpOnly: true
             });
-            
-            res.status(200).json({ token });
+        
+            res.redirect("/api/users/profile");
         } catch (error) {
             req.logger.error("Error en el proceso de crear usuario",error);
             res.status(500).send("Error interno del servidor");
@@ -63,6 +66,10 @@ class UserController {
                 return res.status(401).send("La contraseña es incorrecta");
             }
             req.logger.info(`Usuario logueado con correo ${email}`)
+
+            userExisting.lastConnection = new Date();
+            await userExisting.save();
+
             const token = jwt.sign({ user: userExisting }, "teccomerce", {
                 expiresIn: "24h"
             });
@@ -72,7 +79,7 @@ class UserController {
                 httpOnly: true
             });
 
-            res.status(200).json({ token });
+            res.redirect("/api/users/profile");;
         } catch (error) {
             req.logger.error("Error en el proceso de loguearse",error);
             res.status(500).send("Error en el proceso de login.");
@@ -87,6 +94,10 @@ class UserController {
     async logout(req, res) {
         res.clearCookie("teccomerceCookieToken");
         req.logger.info("Se desconecta usuario y se redirige a Login")
+        
+        req.user.lastConnection = new Date();
+        await req.user.save();
+        
         res.redirect("/login");
     }
     async admin(req, res) {
@@ -163,20 +174,76 @@ class UserController {
     async changeRolPremium(req, res) {
         try {
             const { uid } = req.params;
-                const user = await UserModel.findById(uid);
-    
+            const user = await userRepository.findById(uid);
+
             if (!user) {
-                req.logger.warning(`El correo ${email} no pertenece a ningun usuario.`);
-                return res.render("resetPassword", { error: "No se encontró usuario con el email ingresado." });
+                req.logger.warning(`No se encuentra usuario con ID: ${uid}.`);
+                return res.status(404).send("Usuario por ID no encontrado.");
+            }
+
+            const newRole = user.role === 'user' ? 'premium' : 'user';
+
+            if (newRole === 'premium') {
+                const requiredDocumentation = ["Identificacion", "Comprobante de domicilio", "Comprobante de estado de cuenta"];
+                const userDocumentation = [...new Set(user.documents.map(doc => doc.name.split('.').slice(0, -1).join('.')))];
+                const documentationValidation = requiredDocumentation.every(doc => userDocumentation.includes(doc))
+                
+                if (!documentationValidation) {
+                    req.logger.warning(`El usuario no tiene la documentación requerida.`);
+                    return res.status(404).send("Usuario sin documentación requerida.");
+                }
             }
     
-            const newRole = user.role === 'user' ? 'premium' : 'user';
-    
-            const updateUser = await UserModel.findByIdAndUpdate(uid, { role: newRole }, { new: true });
+            const updateUser = await userRepository.findByIdAndUpdate(uid, newRole)
+            
+            req.logger.info(`Usuario cambiado a Role: ${newRole}.`);
             res.json(updateUser);
+
         } catch (error) {
-            req.logger.error(`Error en el proceso de cambiar rol de usuario`);
-            res.status(500).json({ message: 'Error en el proceso de cambiar rol de usuario' });
+            req.logger.error(`Error en el proceso de cambiar rol de usuario`,error);
+            res.status(500).json({ message: 'Error en el proceso de cambiar rol de usuario',error });
+        }
+    }
+    async uploadedDocuments(req, res) {
+        const { uid } = req.params;
+        const uploadedDocuments = req.files;
+
+        try {
+            const user = await userRepository.findById(uid);
+    
+            if (!user) {
+                req.logger.warning(`No se encuentra usuario con el ID ${uid}`);
+                return res.status(404).send("Usuario no encontrado por ID");
+            }
+
+            if (uploadedDocuments) {
+                if (uploadedDocuments.documents) {
+                    user.documents = user.documents.concat(uploadedDocuments.documents.map(doc => ({
+                        name: doc.originalname,
+                        reference: doc.path
+                    })))
+                }
+                if (uploadedDocuments.products) {
+                    user.documents = user.documents.concat(uploadedDocuments.products.map(doc => ({
+                        name: doc.originalname,
+                        reference: doc.path
+                    })))
+                }
+                if (uploadedDocuments.profile) {
+                    user.documents = user.documents.concat(uploadedDocuments.profile.map(doc => ({
+                        name: doc.originalname,
+                        reference: doc.path
+                    })))
+                }
+            }
+            console.log(user)
+            await user.save();
+    
+            req.logger.info(`Documento cargado exitosamente`);
+            res.status(200).send("Documento cargado exitosamente");
+        } catch (error) {
+            req.logger.error(`Error en el proceso de cargar un documento al usuario.`,error);
+            res.status(500).send("Error en el proceso de cargar un documento al usuario.",error);
         }
     }
 }
