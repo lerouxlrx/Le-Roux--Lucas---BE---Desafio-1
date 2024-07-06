@@ -14,5 +14,8 @@ router.post("/requestPasswordReset", userManager.requestPasswordReset);
 router.post('/reset-password', userManager.resetPassword);
 router.put("/premium/:uid", userManager.changeRolPremium);
 router.post("/:uid/documents", upload.fields([{ name: "documents" }, { name: "products" }, { name: "profile" }]), userManager.uploadedDocuments)
+router.get("/", userManager.usersMainData);
+router.delete("/delete", userManager.deleteInactiveUsers);
+router.delete("/delete/:uid", userManager.deleteUser);
 
 module.exports = router; 

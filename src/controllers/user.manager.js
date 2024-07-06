@@ -157,7 +157,7 @@ class UserController {
             }
 
             if (isValidPassword(password, user)) {
-                req.logger.warning(`La contraseña ingresada tiene que ser distinta a la error.`);
+                req.logger.warning(`La contraseña ingresada tiene que ser distinta a la anterior.`);
                 return res.render("resetPassword", { error: "La contraseña ingresada tiene que ser distinta a la error." });
             }
 
@@ -245,6 +245,47 @@ class UserController {
             req.logger.error(`Error en el proceso de cargar un documento al usuario.`,error);
             res.status(500).send("Error en el proceso de cargar un documento al usuario.",error);
         }
+    }
+    async usersMainData(req, res) {
+        try {
+            const users = await userRepository.findAll()
+    
+            req.logger.info(`Usuarios: ${users}`);
+            res.status(200).send(`Usuarios: ${users}`);
+        } catch (error) {
+            req.logger.error(`Error en el proceso de cargar usuarios con datos principales.`,error);
+            res.status(500).send(`Error en el proceso de cargar usuarios con datos principales.`,error);
+        }
+    }
+    async deleteInactiveUsers(req, res) {
+        try {
+            const days = 2;
+            const { result, usersDeleted } = await userRepository.findAndDeleteInactiveUsers(days);
+            for (const user of usersDeleted) {
+                await emailManager.userDeleted(user.email);
+                req.logger.info(`Aviso de usuario eliminado enviado a: ${user.email}`);
+            }
+            req.logger.info(`Usuarios eliminados: ${result.deletedCount}`);
+            res.status(200).send({ message: `Usuarios eliminados: ${result.deletedCount}` });
+        } catch (error) {
+            req.logger.error(`Error en el proceso de eliminar usuarios inactivos por ${2} dias.`, error);
+            res.status(500).send({ message: `Error en el proceso de eliminar usuarios inactivos por ${2} dias.`, error });
+        }
+    }
+    async deleteUser (req, res) {
+        let userId = req.params.uid;
+        try {
+            const userDelete = await userRepository.deleteById(userId);
+            if (!userDelete) {
+                req.logger.warning(`Usuario no encontrado con ID ${userId}`);
+                return res.status(404).json({ error: `Usuario no encontrado con ID ${userId}` });
+            }
+            req.logger.info(`Usuario con ID ${userId} eliminado correctamente.`);
+            res.json({ message: `Usuario con ID ${userId} eliminado correctamente` });
+        } catch (error) {
+            req.logger.error(`Error al eliminar usuario con ID ${userId}:`, error);
+            res.status(500).json({ error: "Error al eliminar usuario" + error });
+        } 
     }
 }
 

@@ -1,1 +1,20 @@
-<h2>Pagina de solo acceso para admin.</h2>
+<h1>Usuarios</h1>
+<section id="seccionUsuarios">
+    <article class="articuloUsuarios">
+{{#each users}}
+        <div class="cardUser">      
+            <h2 class="nameUser">{{first_name}}</h2>
+            <h3 class="emailUser">Correo:{{email}}</h3>
+            <h5 class="roleUser">Rol: {{role}}</h5>
+            <h5 class="lastConnection">Ultima conexión: {{lastConnection}}</h5>
+            <button class="eliminarUsuario" onclick="deleteUser('{{userId}}')">Eliminar usuario</button>
+        </div>
+{{/each}}
+    </article>
+    <article class="botonesUsuarios">
+        <button class="eliminarUsuariosInactivos" onclick="deleteInactiveUsers()">Eliminar Usuarios inactivos</button>
+        <button class="volverUser"><a href="/api/users/profile">Volver a perfil</a></button>
+    </article>
+</section>
+
+<script src="/js/user.js"></script>

@@ -36,6 +36,35 @@ class UserRepository {
             throw error;
         }
     }
+    async findAll(id) {
+        try {
+            return await UserModel.find().select('first_name email role lastConnection');
+        } catch (error) {
+            throw error;
+        }
+    }
+    async findAndDeleteInactiveUsers(days) {
+        const dateLimit = new Date();
+        dateLimit.setDate(dateLimit.getDate() - days);
+        try {
+            const usersDeleted = await UserModel.find({ lastConnection: { $lt: dateLimit } });
+            const result = await UserModel.deleteMany({ lastConnection: { $lt: dateLimit } });
+            return { result, usersDeleted };
+        } catch (error) {
+            throw error;
+        }
+    }
+    async deleteById(id) {
+        try {
+            const userDelete = await UserModel.findByIdAndDelete(id);
+            if (!userDelete) {
+                return null;
+            }
+            return userDelete;
+        } catch (error) {
+            throw new Error("Error al eliminar usuario por ID");
+        }
+    }
 }
 
 module.exports = UserRepository;

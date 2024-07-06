@@ -2,6 +2,9 @@ const ProductModel = require("../models/product.models.js");
 const CartRepository = require("../repositories/cart.repository.js");
 const cartRepository = new CartRepository();
 const TicketModel = require("../models/ticket.models.js");
+const UserRepository = require("../repositories/user.repository.js");
+const userRepository = new UserRepository();
+const moment = require('moment');
 
 class ViewsController {
     async renderProducts(req, res) {
@@ -143,6 +146,26 @@ class ViewsController {
     async renderPasswordReset(req, res) {
         res.render("passwordReset");
     }
+    async renderUsers(req, res) {
+        try {
+            const users = await userRepository.findAll();
+            
+            const filteredUsers = users.map(user => ({
+                first_name: user.first_name,
+                email: user.email,
+                role: user.role,
+                userId: user._id,
+                lastConnection: user.lastConnection? moment(user.lastConnection).format('YYYY-MM-DD HH:mm') : 'N/A'
+            }));
+    
+            req.logger.info(`Usuarios: ${JSON.stringify(filteredUsers)}`);
+            res.render("admin", { users: filteredUsers });
+        } catch (error) {
+            req.logger.error(`Error en el proceso de cargar usuarios para views.`, error);
+            res.status(500).send(`Error en el proceso de cargar usuarios para views.`, error);
+        }
+    }
+
 }
 
 module.exports = ViewsController;

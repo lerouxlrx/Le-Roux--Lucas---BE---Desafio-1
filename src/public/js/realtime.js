@@ -37,7 +37,7 @@ const renderProducts = (products) => {
 }
 
 const deleteProduct = (id) =>  {
-    socket.emit("deleteProduct", id);
+    socket.emit("deleteProduct", { id, role });
 }
 
 document.getElementById("btnEnviar").addEventListener("click", () => {
