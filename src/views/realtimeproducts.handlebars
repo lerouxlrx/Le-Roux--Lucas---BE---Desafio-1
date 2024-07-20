@@ -1,25 +1,49 @@
 <h3><strong id="email">{{email}}</strong> con rol: <strong id="role">{{role}}</strong></h3>
 
-<h2>Productos actualizados en tiempo real</h2>
-
-<div id="productsContainer"></div>
-
-<h2>Formulario para agregar productos</h2>
-
-<form>
-    <input type="text" id="title" placeholder="Titulo">
-    <input type="text" id="description" placeholder="Descripcion">
-    <input type="number" id="price" placeholder="Precio">
-    <input type="text" id="img" value="Sin Imagen">
-    <input type="text" id="code" placeholder="Código">
-    <input type="number" id="stock" placeholder="Stock">
-    <input type="text" id="category" placeholder="Categoria">
-    <select id="status">
-        <option value="true"> Activo </option>
-        <option value="false"> Inactivo </option>
-    </select>
-    <button type="button" id="btnEnviar"> Enviar </button>
+<h2 class="tituloAdmin">Formulario para agregar productos</h2>
+<form class="productForm contenedorFormAdmin">
+    <div class="datoProducto datoFormAdmin">
+        <label class="datoFormLabelAdmin" for="title">Titulo:</label>
+        <input class="datoFormInputAdmin" type="text" id="title" placeholder="Titulo" required>
+    </div>
+    <div class="datoProducto datoFormAdmin">
+        <label class="datoFormLabelAdmin" for="description">Descripcion:</label>
+        <input class="datoFormInputAdmin" type="text" id="description" placeholder="Descripcion" required>
+    </div>
+    <div class="datoProducto datoFormAdmin">
+        <label class="datoFormLabelAdmin" for="price">Precio:</label>
+        <input class="datoFormInputAdmin" type="number" id="price" placeholder="Precio" required>
+    </div>
+    <div class="datoProducto datoFormAdmin">
+        <label class="datoFormLabelAdmin" for="img">Imagen:</label>
+        <input class="datoFormInputAdmin" type="text" id="img" value="Sin Imagen">
+    </div>
+    <div class="datoProducto datoFormAdmin">
+        <label class="datoFormLabelAdmin" for="code">Código:</label>
+        <input class="datoFormInputAdmin" type="text" id="code" placeholder="Código" required>
+    </div>
+    <div class="datoProducto datoFormAdmin">
+        <label class="datoFormLabelAdmin" for="stock">Stock:</label>
+        <input class="datoFormInputAdmin" type="number" id="stock" placeholder="Stock" required>
+    </div>
+    <div class="datoProducto datoFormAdmin">
+        <label class="datoFormLabelAdmin" for="category">Categoria:</label>
+        <input class="datoFormInputAdmin" type="text" id="category" placeholder="Categoria" required>
+    </div>
+    <div class="datoProducto datoFormAdmin">
+        <label class="datoFormLabelAdmin" for="status">Estado:</label>
+        <select class="datoFormInputAdmin" id="status">
+            <option value="true"> Activo </option>
+            <option value="false"> Inactivo </option>
+        </select>
+    </div>
+    <div class="btnDiv productoDiv">
+        <button class="btnEnviar btnFormAdmin btnFormPrimary" type="button" id="btnEnviar">Enviar</button>
+    </div>
 </form>
+
+<h2 class="tituloAdmin">Productos actualizados en tiempo real</h2>
+<div id="productsContainer" class="productsContainer"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>

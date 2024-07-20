@@ -15,6 +15,7 @@ const renderProducts = (products) => {
         card.classList.add("card");
 
         card.innerHTML = ` 
+            <img src="${item.thumbnails}" alt="${item.title}" class="cardImg" />
             <p> ${item.title} </p>
             <p> ${item.price} </p>
             <button> Eliminar </button>

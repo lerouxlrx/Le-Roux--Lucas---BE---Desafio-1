@@ -1,26 +1,15 @@
 <h1>PRODUCTOS</h1>
 <section id="seccionProductos">
-{{!--     <article class="datosUsuario">
-        <h2 class="subtitLogin subtitForm subtitUsuarios">Bienvenido, {{first_name}} {{user.last_name}}!</h2>
-        <div class="contenedorProfile contenedorPerfil">
-            <p class="datoPerfil emailPerfil">Email: {{user.email}}</p>
-            <p class="datoPerfil rolPerfil">Rol: {{user.role}}</p>
-        </div>
-        <button><a class="btnLogout btnForm" href="/api/sessions/logout">Logout</a></button>
-    </article> --}}
-    <a href="/carts/{{cartId}}">
-    Carrito
-    </a>
     <article class="articuloProductos">
 {{#each products}}
-        <div class="card">
-            <h4 class="categoria">{{category}}</h4>        
-            <h2 class="titulo">{{title}}   -   {{code}}</h2>
-            <h3 class="precio">Precio:{{price}}</h3>
+        <div class="cardProducts">
+            <h4 class="categoria itemProducts">{{category}}</h4>        
+            <h2 class="titulo itemProducts">{{title}}   -   {{code}}</h2>
+            <h3 class="precio itemProducts">Precio:{{price}}</h3>
             <img  class="imagen" src="{{thumbnails}}" alt="Imagen">
-            <h5 class="descripcion">Descripción: {{description}}</h5>
-            <form action="/api/carts/{{../cartId}}/products/{{id}}" method="POST">
-                <button class="btnMios" type="submit">Agregar a Carrito</button>
+            <h5 class="descripcion itemProducts">{{description}}</h5>
+            <form class="btnCardProducts" action="/api/carts/{{../cartId}}/products/{{id}}" method="POST">
+                <button class="btnCartProducts" type="submit">Agregar a Carrito</button>
             </form>
         </div>
 {{/each}}

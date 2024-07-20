@@ -1,28 +1,33 @@
 <h1>Carrito</h1>
 
-<div class="container"></div>
-{{#each products}}
-  <div class="carrito-producto">
-    <div class="carrito-producto-info">
-      <img src="{{this.product.thumbnails}}" alt="{{this.product.title}}">
-      <div>
-        <p class="titulo">{{this.product.title}}</p>
-        <p class="descripcion">{{this.product.description}}</p>
+<div class="cartContainer">
+  <div class="productsCartContainer">
+    {{#each products}}
+      <div class="productCart">
+        <div class="productCartInfo">
+          <img class="imgProductCart" src="{{this.product.thumbnails}}" alt="{{this.product.title}}">
+          <div class="productCartInfoDiv">
+            <p class="titleProductCart">{{this.product.title}}</p>
+            <p class="descriptionProductCart">{{this.product.description}}</p>
+          </div>
+        </div>
+        <p class="priceProductCart"> Precio unitario: ${{this.product.price}}</p>
+        <p class="quantityProductCart">Cantidad: {{this.quantity}}</p>
+        <button class="btnDeleteProductCart" onclick="deleteProduct('{{this.cartId}}', '{{this.product._id}}')">Eliminar</button>
       </div>
-    </div>
-    <p class="precio"> Precio unitario: ${{this.product.price}}</p>
-    <p>Cantidad: {{this.quantity}}</p>
-    <button onclick="deleteProduct('{{this.cartId}}', '{{this.product._id}}')">Eliminar</button>
+    {{/each}}
   </div>
-{{/each}}
+
+  <div class="btnsCartContainer">
+    <button class="btnEmptyCart" onclick="emptyCart('{{cartId}}')">Vaciar Carrito</button>
+    <h3 class="totalBuyCart">Total de la compra: ${{totalBuy}}</h3>
+    <form class="btnBuyCart" action="/api/carts/{{cartId}}/purchase" method="POST">
+    <button class="btnBtnBuyCart" type="submit">Comprar</button>
+    </form>
+    <a class="storeCart"href="/products">Volver a tienda</a>
+  </div>
 </div>
 
-<button onclick="emptyCart('{{cartId}}')">Vaciar Carrito</button>
-<h3 class="mt-2">Total de la compra: ${{totalBuy}}</h3>
-<form action="/api/carts/{{cartId}}/purchase" method="POST">
-<button type="submit">Comprar</button>
-</form>
-<a href="/products">Volver a tienda</a>
 <script src="/js/cart.js"></script>
 
 
