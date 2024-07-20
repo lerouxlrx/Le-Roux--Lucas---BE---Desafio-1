@@ -1,22 +1,24 @@
 <h1 class="tituloLogin tituloForm tituloUsuarios">Login</h1>
 <form class="loginForm contenedorForm" action="/api/users/login" method="POST">
     <div class="datoLogin emailLogin datoForm emailForm">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
+        <label class="datoLoginLabel emailLoginLabel datoFormLabel"  for="email">Email:</label>
+        <input class="datoLoginInput emailLoginInput datoFormInput"  type="email" id="email" name="email" required>
     </div>
     <div class="datoLogin passwordLogin datoForm passwordForm">
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
+        <label class="datoLoginLabel passwordLoginLabel datoFormLabel" for="password">Password:</label>
+        <input class="datoLoginInput passwordLoginInput datoFormInput" type="password" id="password" name="password" required>
     </div>
     <div class="btnDiv loginDiv">
-       <button class="btnLogin btnForm" type="submit">Login</button>
+       <button class="btnLogin btnForm btnFormPrimary" type="submit">Login</button>
     </div>
     <div class="btnDiv registerDiv">
-        <a class="btnRegiser" href="/register">Registrarme</a>
+        <a class="btnRegister btnForm btnFormSecundary" href="/register">Registrarme</a>
     </div>
-        <div class="btnDiv reestablecerDiv">
-        <a class="btnRegiser" href="/view-reset">Reestablecer contraseña</a>
+    <div class="btnDiv reestablecerDiv">
+        <a class="btnResetPassword btnForm btnFormSecundary" href="/view-reset">Reestablecer contraseña</a>
     </div>
 </form>
 
-<a class="btnGithub" href="/api/sessions/github"><button>Iniciar sesión con GitHub</button></a>
+<a class="btnGithub" href="/api/sessions/github">
+    <button class="btnGithubButton btnForm btnFormPrimary">Iniciar sesión con GitHub</button>
+</a>

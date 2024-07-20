@@ -1,26 +1,29 @@
-<h1 class="tituloLogin tituloRegister tituloUsuarios">Registrate</h1>
+<h1 class="tituloRegister tituloForm tituloUsuarios">Registrate</h1>
 <form class="registerForm contenedorForm" action="/api/users/register" method="post">
-    <div class="datoRegister nombreRegister datoForm nombreForm">
-        <label for="first_name">Nombre:</label>
-        <input type="text" id="first_name" name="first_name" required>
+    <div class="datoRegister nombreRegister datoForm">
+        <label class="datoRegisterLabel nombreRegisterLabel datoFormLabel" for="first_name">Nombre:</label>
+        <input class="datoRegisterInput nombreRegisterInput datoFormInput" type="text" id="first_name" name="first_name" required>
     </div>
-    <div class="datoRegister apellidoRegister datoForm apellidoForm">
-            <label for="last_name">Apellido:</label>
-            <input type="text" id="last_name" name="last_name" required>
+    <div class="datoRegister apellidoRegister datoForm">
+        <label class="datoRegisterLabel apellidoRegisterLabel datoFormLabel" for="last_name">Apellido:</label>
+        <input class="datoRegisterInput apellidoRegisterInput datoFormInput" type="text" id="last_name" name="last_name" required>
     </div>
-    <div class="datoRegister emailRegister datoForm emailForm">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
+    <div class="datoRegister emailRegister datoForm">
+        <label class="datoRegisterLabel emailRegisterLabel datoFormLabel" for="email">Email:</label>
+        <input class="datoRegisterInput emailRegisterInput datoFormInput" type="email" id="email" name="email" required>
     </div>
-    <div class="datoRegister passwordRegister datoForm passwordForm">
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
+    <div class="datoRegister passwordRegister datoForm">
+        <label class="datoRegisterLabel passwordRegisterLabel datoFormLabel" for="password">Password:</label>
+        <input class="datoRegisterInput passwordRegisterInput datoFormInput" type="password" id="password" name="password" required>
     </div>
-    <div class="datoRegister edadRegister datoForm edadForm">
-        <label for="age">Edad:</label>
-        <input type="number" id="age" name="age" required>
+    <div class="datoRegister edadRegister datoForm">
+        <label class="datoRegisterLabel edadRegisterLabel datoFormLabel" for="age">Edad:</label>
+        <input class="datoRegisterInput edadRegisterInput datoFormInput" type="number" id="age" name="age" required>
     </div>
     <div class="btnDiv registrarDiv">
-        <button class="btnLogin btnForm" type="submit">Registrar</button>
+        <button class="btnLogin btnForm btnFormPrimary" type="submit">Registrar</button>
+    </div>
+        <div class="btnDiv loginDiv">
+        <a class="btnLogin btnForm btnFormSecundary" href="/login">Login</a>
     </div>
 </form>
